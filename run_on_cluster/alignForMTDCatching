@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# 这个终端函数用来在 cluster 上执行 alignment
+# 因为之后的 MH catching 需要用到 clipped 序列信息 所以这里开启了 bwa mem 的 -Y 选项（全部使用 soft clipping）
+    # 输入参数
+    # 1 流程名称 用于给 cluster 作业以及输出文件起名
+    # 2 reference fasta 文件
+    # 3 fastq read 1 文件
+    # 4 fastq read 2 文件
+bsub -J "$1-align" -m "$CAPABLE_NODES" -n 10 -R "span[ptile=10]" -q normal \
+"   bwa index $2
+    bwa mem -t 8 -Y $2 $3 $4 | samtools view -@ 2 -F 2048 -Sb | samtools sort -@ 2 -m 10G -o mapped/$1.sort.bam
+"

@@ -1,0 +1,20 @@
+#!/bin/bash
+# 这个进程将会执行四个步骤
+# 1 查找序列中全部的 MH pairs 并生成 MTD 的特征序列
+# 2 在 MH pairs 的关键位置统计 read depth
+# 3 在 alignment 中查找具有 MTD 特征序列的 reads
+# 4 使用 read depth 来标准化 reads count
+    # 输入参数
+    # 1 流程名称 用于给 cluster 作业以及输出文件起名
+    # 2 reference fasta 文件
+    # 3 alignment map BAM 文件
+bsub -J "$1-depth" -m "$CAPABLE_NODES" -n 4 -R "span[ptile=4]" -q normal \
+"   find_mh probes/$1.mh < $2
+    generate_signatures.awk $2 \`ls probes/$1.mh* | sort -t. -k1n,1\` > probes/signatures.$1.out
+    samtools index -@ 4 $3
+    sigtobed.awk probes/signatures.$1.out > probes/$1.pos.bed
+    samtools depth -b probes/$1.pos.bed -d 0 $3 > mapped/$1.cov &
+    samtools view $3 | catch_signatures.awk probes/signatures.$1.out - > results/$1.sign.count.tsv &
+    wait
+    normalize_count.awk mapped/$1.cov results/$1.sign.count.tsv > results/$1.sign.norm.tsv
+"
