@@ -146,7 +146,7 @@ p2()
 ##/plot
 
 ##short interMH(0-50nt)
-len_inter_Dup <- data.frame(MHlen,interMH,dup)
+len_inter_Dup <-  data.frame(MHlen,interMH,dup)
 len_shortInter_Dup <- len_inter_Dup[interMH<50,]
 len_shortInter_Dup$group <- cut(len_shortInter_Dup[,"interMH"], breaks = seq(from=0,to=50,by=1))
 len_tab <- data.frame(obs= numeric(), pre= numeric(), stringsAsFactors=FALSE)
