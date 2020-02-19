@@ -93,52 +93,60 @@ mat = table2array(T);
 R = table();
 R.strain = T.Properties.VariableNames';
 R.rev_frq = nanmedian( table2array(T))' ; 
-
-for I = 1:numel(vn)
-    v = log(mat(:,1) ./ mat(:,strcmp(R.strain,'wt'))' );
-    v = v(~isnan(v)) ; 
-    R.sem(I) = sem(v);
-    R.std(I) = std(v);
+wt_values = mat(:,strcmp(R.strain,'wt'))  ; 
+mrc1_values = mat(:,strcmp(R.strain,'mrc1_d'))  ; 
+for I = 1:height(R)
+    vWT = log2(mat(:,I) ./ wt_values' );
+    vWT = vWT(~isnan(vWT)) ; 
+    R.rel_to_wt_log2R(I) = median(vWT);
+%   vMRC1 = log2(mat(:,I) ./ mrc1_values' );
+%   vMRC1 = vMRC1(~isnan(vMRC1)) ; 
+%   R.rel_to_mrc1_log2R(I) = median(vMRC1);
+    R.sem(I) = std(vWT) / sqrt(sum(~isnan(mat(:,I)))) ; 
 end
 
+%
 
-
-R.rel_to_wt_log2R = log2( R.rev_frq ./ R.rev_frq(strcmp(R.strain,'wt')));
-R.rel_to_mrc1_log2R = log2( R.rev_frq ./ R.rev_frq(strcmp(R.strain,'mrc1_d')));
-R.rel_to_wt_diff = ( R.rev_frq - R.rev_frq(strcmp(R.strain,'wt')));
-R.rel_to_mrc1_diff = ( R.rev_frq - R.rev_frq(strcmp(R.strain,'mrc1_d')));
-R.rel_to_wt_R = ( R.rev_frq ./ R.rev_frq(strcmp(R.strain,'wt')));
-R.rel_to_mrc1_R = ( R.rev_frq ./ R.rev_frq(strcmp(R.strain,'mrc1_d')));
-
-genes = { 'rad50_d' 'pds5_d'  'rik1_d' 'rad2_d' 'cds1_d' 'ssb3_d'} ;
+genes = { 'rad50_d' 'pds5_d'  'rik1_d' 'ssb3_d' 'rad2_d' 'cds1_d' } ;
 
 fh = figure('units','centimeters','position',[5 5 8 8]);
 hold on ; 
+ms = 4 ; 
+m = R.rel_to_wt_log2R(strcmp(R.strain,'mrc1_d'));
 for I = 1:numel(genes)
     idx = strcmp(R.strain,genes{I}) ; 
     s = R.rel_to_wt_log2R(idx);
-    m = R.rel_to_wt_log2R(strcmp(R.strain,'mrc1_d'));
     d = R.rel_to_wt_log2R(strcmp(R.strain,[genes{I} '_mrc1_d']));
-    e = s+m ; 
-    if d>3
-        lw=1;
-    else
+    e = s+m ; %e = s*m; % for multiplicative non-log
+    if I<5
         lw=3;
+    else
+        lw=1;
     end
-    ph = errorbar(e,d,R.std(idx),'o' ,'LineWidth',lw,'DisplayName',  regexprep(genes{I},'_d','')  ) ; 
+    txtlabel = ['\it{' regexprep(genes{I},'_d','') '\Delta' '}' ] ; 
+    ph = errorbar(e,d,R.sem(idx),R.sem(idx),'o' ,'LineWidth',lw,'DisplayName',  txtlabel ,'MarkerSize',ms ) ; 
 end
-lh = line(xlim,xlim,'Color','k','LineStyle','--');
-lh.HandleVisibility = 'off';
+mrc1_sem = R.sem(strcmp(R.strain,'mrc1_d')); 
+errorbar(m,m,mrc1_sem,'o' ,'LineWidth',2,'DisplayName',  '\it{mrc1\Delta}' , 'Color', [.7 .7 .7],'MarkerSize',ms   ) ; 
+mrc1_y_min = m-mrc1_sem ; 
+
 xlabel('Expected fold change (single + mrc1\Delta)')
 ylabel('Measured fold change (double mutant)')
 
-y = rev_frq(strcmp(vn,'mrc1_d')) ; 
+y = R.rev_frq(strcmp(R.strain,'mrc1_d')) ; 
 %lh = plot( m ,m , 'ok' ,'MarkerFaceColor',[.7 .7 .7]) ; lh.HandleVisibility = 'off';
 %lh = line(xlim,[m m],'Color',[.7 .7 .7]) ; lh.HandleVisibility = 'off';
-rectangle( 'Position' , [ min(xlim) m-0.5 range(xlim) 1] ,'EdgeColor',[.7 .7 .7])
 %lh = line([m m],ylim,'Color',[.7 .7 .7]) ; lh.HandleVisibility = 'off';
 legend('location','best','box','off')
-ylim([-0.9 5.8])
+ylim([-0.5 5.1]);
+xlim([0.5 7.7]); 
+set(gca,'xtick',0:10); set(gca,'ytick',0:10);
+%ylim([0 28]) 
+%set(gca,'xscale','log'); set(gca,'yscale','log'); % for multiplicative non-log
+lh = line(xlim,xlim,'Color','k','LineStyle','--');
+lh.HandleVisibility = 'off';
+rectangle( 'Position' , [ min(xlim) m-mrc1_sem range(xlim) 2*mrc1_sem] ,'EdgeColor',[.7 .7 .7])
+
 
 print('-dpng' ,'~/Downloads/Fig_ssp1A2-MTD_reversion_rate__epistasis','-r600');
-
+%close ; 
