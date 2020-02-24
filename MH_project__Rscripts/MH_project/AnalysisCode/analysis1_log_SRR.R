@@ -1,5 +1,5 @@
 setwd("E:\\work\\Projects\\2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU\\Sarah\\MH_project\\ProcessedData\\SRR")
-load("MN_Spombe_972h-_Rep1.MHfeatures.Rdata")
+load("MN_Spombe_972h-_Rep1.MHfeatures.Rdata") 
 #load("GSM1023946_MN_Mit.MHfeatures.Rdata")
 ####I. DATA PREPARE#### 
 setwd("E:\\work\\Projects\\2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU\\Sarah\\MH_project\\ProcessedData\\SRR")
