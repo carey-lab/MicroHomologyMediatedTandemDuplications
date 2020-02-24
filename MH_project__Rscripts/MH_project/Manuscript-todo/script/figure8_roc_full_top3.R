@@ -26,7 +26,8 @@ MHfeatures_te <- predata(1)#randomely choose some non-events,seed =1
 ##/balanced dat
 
 ##(2)train the model and draw ROC
-fold_pre1 <- glm(formula = dup ~ MHlen + GCcon + f.interMH + entire_nucleMedian+logentire_geneMedian+logntclosestMHR,
+fold_pre1 <- glm(formula = dup ~ MHlen + GCcon + f.interMH + entire_nucleMedian+logentire_geneMedian+logntclosestMHR
+                 +interGCcon,
                  data = MHfeatures_te,family = "binomial")
 fold_predict1 <- predict(fold_pre1,type='response',newdata=MHfeatures_te)
 fold_pre2<- glm(formula = dup ~ MHlen + f.interMH + entire_nucleMedian,
