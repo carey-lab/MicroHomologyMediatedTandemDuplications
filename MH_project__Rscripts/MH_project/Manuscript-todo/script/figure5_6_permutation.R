@@ -99,7 +99,7 @@ getmode <- function(v) {
 mode <- getmode(shuffled_aver_rank[,1])
 ratio <- c(mode/obs_ave_rank,
            mode/NumMHRs_ave_rank)
-df <- data.frame(model=c("6-feature model", "numMHRs model"),
+df <- data.frame(model=c("7-feature model", "numMHRs model"),
                  ratio=ratio)
 p6 <- function(){
   ggplot(df, aes(x=model, y=ratio, fill=model)) +
