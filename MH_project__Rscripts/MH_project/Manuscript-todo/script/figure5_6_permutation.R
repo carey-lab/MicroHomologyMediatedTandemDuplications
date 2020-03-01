@@ -47,10 +47,10 @@ p5 <- function(dat){
     #geom_point(aes(x =sumPre , y =sumObs), size=2, alpha = 0.8) +
     #geom_point(aes(x = loc, y = sumObs,colour="sumObs"), size=2, alpha = 0.8) +
     #geom_smooth(data = dat, aes(x =sumPre , y =sumObs ),method='lm',formula=y~x,se=F, fullrange=FALSE, level=0.95, linetype = "solid") +
-    labs(x="",y="count",fill = "MH length (bp)")+
+    labs(x="Average rank for top hotspots with >= 10 MTDs",y="average rank")+
     geom_text(x=2000, y=1900, label="p=9.998e-05",)+
     geom_text(x=NumMHRs_ave_rank, y=250, label="NumMHRs\n model",size=3.5)+
-    geom_text(x=obs_ave_rank, y=250, label="6-feature\n model",size=3.5)+
+    geom_text(x=obs_ave_rank, y=250, label="7-feature\n model",size=3.5)+
     theme_bw() +
     geom_segment(aes(x=obs_ave_rank, xend=obs_ave_rank, y=150, yend=20), 
                  arrow = arrow(length = unit(0.3, "cm")))+
@@ -145,3 +145,4 @@ p6()
 ##/plot enrichment ratio
 
 ##/PERMUTATION TEST(SHUFFLING CALCULATION)
+
