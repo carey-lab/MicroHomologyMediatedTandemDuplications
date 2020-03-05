@@ -36,7 +36,7 @@ G0a = grpstats(T0(~strcmp(T0.chr,'MT'),:),{'MHLenR'},{'mean'},'DataVars',{'HasDu
 % MT DNA has 836678x coverage, vs 9139x coverage for whole-gnome 
 tic ;
 DNSMPL = 836678 / 9139 ; 
-NSamples = 10000 ; 
+NSamples = 1000 ; 
 idx_has_dup = find(T.HasDup);
 T_RS_HasDup = cell(1,NSamples);
 N_MHPs = height(T) ; 
@@ -93,12 +93,13 @@ nexttile
 hold on ;
 plot( G0a.MHLenR , G0a.mean_HasDup*100 ,'o-k','DisplayName' , 'gDNA','MarkerFaceColor',[.8 .8 .8]) ; 
 plot( RGa.MHLenR , RGa.mean_HasDup*100 ,'o-','Color',clr ,'DisplayName' , 'mtDNA','MarkerFaceColor',clr) ; 
-set(gca,'xtick',0:10)
+set(gca,'xtick',4:7)
 xlim([3.5 7.5])
 xlabel('MH length (nt)')
-set(gca,'yscale','log')
-legend('location','se')
+set(gca,'yscale','lin')
+legend('location','nw')
+set(gca,'xticklabel',{'4' '5' '6' '>=7'});
 
 ylabel(t,'% of MHPs with an MTD','FontSize',15)
-print( '-dpng' , [ FIGNAME '_max' ] , '-r300' );
+print( '-dpng' , [ FIGNAME '' ] , '-r300' );
 %close;
