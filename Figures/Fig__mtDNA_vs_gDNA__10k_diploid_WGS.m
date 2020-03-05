@@ -4,7 +4,12 @@ FIGNAME = '~/Nutstore Files/Microhomology shared folder/Figures/Supplementary Fi
 
 T0= readtable( [DATADIR '10k_rm.sign.count.tsv'],'FileType','text','Format','%s%d%d%d%d%f%d');
 %T0 = readtable( '~/Downloads/10k_rm_10pctA.sign.count.tsv' ,'FileType','text','Format','%s%d%d%d%d%d%d');
-%T0= readtable( [DATADIR 'SRR7817502_rm.sign.count.tsv'],'FileType','text','Format','%s%d%d%d%d%d%d');
+HAP = readtable( [DATADIR 'SRR7817502_rm.sign.count.tsv'],'FileType','text','Format','%s%d%d%d%d%d%d');
+HAP.Properties.VariableNames = {'chr' 's1' 'e1' 's2' 'e2' 'DupCounts' 'ColCounts'};
+HAP = HAP( ~strcmp(HAP.chr,'MTR'),:);
+HAP = HAP( ~strcmp(HAP.chr,'AB325691'),:);
+HAP.InterMHDist = HAP.s2 - HAP.e1 + 1;  
+
 
 T0.Properties.VariableNames = {'chr' 's1' 'e1' 's2' 'e2' 'DupCounts' 'ColCounts'};
 T0 = T0( ~strcmp(T0.chr,'mating_type_region'),:);
@@ -26,6 +31,7 @@ T = T0(strcmp(T0.chr,'MT') , :);
 
 G0 = grpstats(T0(~strcmp(T0.chr,'MT'),:),{'InterMHDistR' 'MHLenR'},{'mean'},'DataVars',{'HasDup' 'DupCounts'});
 G0a = grpstats(T0(~strcmp(T0.chr,'MT'),:),{'MHLenR'},{'mean'},'DataVars',{'HasDup' 'DupCounts'});
+G0b = grpstats(T0(~strcmp(T0.chr,'MT'),:),{'InterMHDistR'},{'mean'},'DataVars',{'HasDup' 'DupCounts'});
 
 
 %% %% %%  properly downsample
@@ -62,9 +68,66 @@ R.HasDup       = cell2mat(T_RS_HasDup)' ;
 
 RG = grpstats( R , {'InterMHDistR' 'MHLenR'} ,'mean' , 'DataVars' , 'HasDup');
 RGa = grpstats( R , {'MHLenR'} ,'mean' , 'DataVars' , 'HasDup');
+RGb = grpstats( R , {'InterMHDistR'} ,'mean' , 'DataVars' , 'HasDup');
 
 %save('~/Downloads/downsample_MTdnaR.mat' , 'R')
 fprintf('Running took %0.02f minutes\n' , toc / 60 ) ;
+
+%% histogram of inter-MH distance for gDNA and for mtDNA
+fh = figure('units','centimeters','position',[5 5  10 7]) ;
+t = tiledlayout(1,2,'TileSpacing','Compact','Padding','Compact');
+
+nexttile;
+hold on ; 
+mtDNA = T0.InterMHDist(T0.DupCounts>0 & strcmp(T0.chr,'MT')) ;
+gDNA  = T0.InterMHDist(T0.DupCounts>0 & ~strcmp(T0.chr,'MT')) ; 
+histogram(mtDNA, 10 ,'Normalization','Probability')
+histogram(gDNA , 10  ,'Normalization','Probability') 
+legend( {'mtDNA' 'gDNA'} , 'Location', 'nw')
+xlabel('inter-MH distance')
+ylabel('Fraction of MTDs')
+title('10k diploid')
+
+% and for haploid
+nexttile;
+hold on ; 
+mtDNA = HAP.InterMHDist(HAP.DupCounts>0 & strcmp(HAP.chr,'MT')) ;
+gDNA  = HAP.InterMHDist(HAP.DupCounts>0 & ~strcmp(HAP.chr,'MT')) ; 
+histogram(mtDNA, 10 ,'Normalization','Probability')
+histogram(gDNA , 10  ,'Normalization','Probability') 
+legend( {'mtDNA' 'gDNA'} , 'Location', 'ne')
+xlabel('inter-MH distance')
+ylabel('Fraction of MTDs')
+title('haploid')
+
+
+%% ksdensity
+fh = figure('units','centimeters','position',[5 5  10 7]) ;
+t = tiledlayout(1,2,'TileSpacing','Compact','Padding','Compact');
+
+nexttile;
+hold on ; 
+mtDNA = T0.InterMHDist(T0.DupCounts>0 & strcmp(T0.chr,'MT')) ;
+gDNA  = T0.InterMHDist(T0.DupCounts>0 & ~strcmp(T0.chr,'MT')) ; 
+ksdensity(mtDNA)
+ksdensity(gDNA ) 
+legend( {'mtDNA' 'gDNA'} , 'Location', 'nw')
+xlabel('inter-MH distance')
+ylabel('Fraction of MTDs')
+title('10k diploid')
+
+% and for haploid
+nexttile;
+hold on ; 
+mtDNA = HAP.InterMHDist(HAP.DupCounts>0 & strcmp(HAP.chr,'MT')) ;
+gDNA  = HAP.InterMHDist(HAP.DupCounts>0 & ~strcmp(HAP.chr,'MT')) ; 
+ksdensity(mtDNA)
+ksdensity(gDNA ) 
+legend( {'mtDNA' 'gDNA'} , 'Location', 'ne')
+xlabel('inter-MH distance')
+ylabel('Fraction of MTDs')
+title('haploid')
+
 %% Figure 
 
 
