@@ -28,14 +28,14 @@ def GC(x):
 parser = argparse.ArgumentParser()
 parser.add_argument('--fasta', help='FASTA input filename')
 parser.add_argument('--countstsv', help='counts.tsv file produced by catch_signatures.awk')
+parser.add_argument('--output_filename', help='<file name to save dataframe>.feather')
 
 args = parser.parse_args()
 
-# for development
-os.chdir('/Users/lcarey/Downloads')
-args.fasta = '/Users/lcarey/CareyLab/ExternalData/PomBase/pombe_n.fasta'
-args.countstsv = 'test.tsv'
-args.countstsv = '/Users/lcarey/CareyLab/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/DataFromCluster/SRR7817502_n.sign.count_500bp.tsv'
+## for development
+#os.chdir('/Users/lcarey/Downloads')
+#args.fasta = '/Users/lcarey/CareyLab/ExternalData/PomBase/pombe_n.fasta'
+#args.countstsv = '/Users/lcarey/CareyLab/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/DataFromCluster/SRR7817502_n.sign.count_500bp.tsv'
 
 # load input files
 print(args.fasta, ' is ', os.path.getsize(args.fasta), ' bytes')
@@ -118,9 +118,9 @@ cnts_tsv_df = cnts_tsv_df.rename(columns={"s01": "MHP_start", "e2": "MHP_end"})
 
 # save
 tic = time.time()
-cnts_tsv_df.to_pickle( "/Users/lcarey/Downloads/df.pickle" )
+cnts_tsv_df.to_pickle( args.output_filename )
 toc = time.time()
-print(f"Saving as pickle took {(toc - tic)/60:0.2f} minutes.")
+print(f"Saving as pickle took {(toc - tic)/60:0.2f} minutes to file : {args.output_filename :s} ")
 
 tic = time.time()
 cnts_tsv_df.to_hdf( "/Users/lcarey/Downloads/df.h5" , key='df', mode='w')
