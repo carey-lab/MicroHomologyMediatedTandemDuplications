@@ -40,6 +40,8 @@ args = parser.parse_args()
 # load input files
 print(args.fasta, ' is ', os.path.getsize(args.fasta), ' bytes')
 fa = pyfastx.Fasta(args.fasta)
+for s in fa:
+    print( "sequences in the FASTA file : ", s.id , " , name=" , s.name  , " desc=" , s.description , 'l=' , len(s.seq) )
 
 print(args.countstsv, ' is ', os.path.getsize(args.countstsv), ' bytes')
 tic = time.time()
@@ -49,9 +51,9 @@ print(f"... loaded. Adding Sequence data took {toc - tic:0.2f} seconds")
 
 ## smaller df for debugging 
 #cnts_tsv_df = cnts_tsv_df.loc[ (cnts_tsv_df["chr"]=="I") ]
-cnts_tsv_df = cnts_tsv_df.loc[ (cnts_tsv_df["chr"]=="I") | (cnts_tsv_df["chr"]=="II")  | (cnts_tsv_df["chr"]=="III")  ] 
+#cnts_tsv_df = cnts_tsv_df.loc[ (cnts_tsv_df["chr"]=="I") | (cnts_tsv_df["chr"]=="II")  | (cnts_tsv_df["chr"]=="III")  ] 
 #cnts_tsv_df = cnts_tsv_df.loc[ (cnts_tsv_df["s1"] < 1000000) | (cnts_tsv_df["NDups"] > 0) ] 
-cnts_tsv_df = cnts_tsv_df.reset_index(drop=True) # rebuild row numbers in the shrunken dataframe
+#cnts_tsv_df = cnts_tsv_df.reset_index(drop=True) # rebuild row numbers in the shrunken dataframe
 
 cnts_tsv_df["s01"] = cnts_tsv_df.s1 - 1
 cnts_tsv_df["e01"] = cnts_tsv_df.e1 - 1
@@ -61,15 +63,16 @@ cnts_tsv_df["e02"] = cnts_tsv_df.e2 - 1
 # put the position columns into the order needed to make a .bed file  : s01 & e2
 cnts_tsv_df["MH_length"] = cnts_tsv_df.e1 - cnts_tsv_df.s1 + 1
 cnts_tsv_df = cnts_tsv_df[['chr','s01','e2','MH_length','NDups','s1','s2','e1','e01','s02','e02']]
+print( cnts_tsv_df.head() )
 
 
 
 
 # Assign MHseq, MHlen, & GC
-tic = time.time()
-
 # way way way way faster to not work with dataframes
 #   extract all info into lists, save into a list, and put the result into the df
+
+tic = time.time()
 MHseq = ["" for x in range(len(cnts_tsv_df))]
 interMHseq = ["" for x in range(len(cnts_tsv_df))]
 
@@ -77,7 +80,7 @@ c=cnts_tsv_df['chr'].to_list()
 s1=cnts_tsv_df['s1'].to_list()
 e1=cnts_tsv_df['e1'].to_list()
 s02=cnts_tsv_df['s02'].to_list()
-
+print('Extracting sequences...')
 for I in range(len(cnts_tsv_df)):
     MHseq[I] = fa.fetch( c[I] , (s1[I] , e1[I] ) )
     interMHseq[I] = fa.fetch( c[I] , (e1[I]+1 , s02[I]) )
@@ -89,15 +92,13 @@ print(f"... done. Extracting sequences took {(toc - tic)/60:0.2f} minutes. Addin
 del s1,e1,s02,c,MHseq
 
 
+# addd GC content to df
 cnts_tsv_df["MH_Sequence_GC"] = cnts_tsv_df["MH_Sequence"].apply(GC)
 cnts_tsv_df["InterMH_Sequence_GC"] = list(map(GC,interMHseq))
 cnts_tsv_df["DuplicatedRegion_GC"] = cnts_tsv_df["MH_Sequence"].add(interMHseq).apply(GC)
 cnts_tsv_df["CompleteMHP_GC"] = cnts_tsv_df["MH_Sequence"].add( cnts_tsv_df["MH_Sequence"].add(interMHseq) ).apply(GC)
+
 cnts_tsv_df["Duplication_Creates_modulo3_insertion"] = (list(map(len,interMHseq))+cnts_tsv_df["MH_Sequence"].apply(len)) % 3==0
-#cnts_tsv_df["InterMH_Sequence_GC"] = cnts_tsv_df["InterMH_Sequence"].apply(GC)
-#cnts_tsv_df["DuplicatedRegion_GC"] = cnts_tsv_df["MH_Sequence"].add(cnts_tsv_df["InterMH_Sequence"]).apply(GC)
-#cnts_tsv_df["CompleteMHP_GC"] = cnts_tsv_df["MH_Sequence"].add( cnts_tsv_df["MH_Sequence"].add(cnts_tsv_df["InterMH_Sequence"]) ).apply(GC)
-#cnts_tsv_df["Duplication_Creates_modulo3_insertion"] = (cnts_tsv_df["MH_Sequence"].apply(len)+cnts_tsv_df["InterMH_Sequence"].apply(len)) % 3==0
 
 # this  make files smaller 
 cnts_tsv_df["MH_Sequence_GC"] = cnts_tsv_df["MH_Sequence_GC"].astype('uint8')
@@ -118,17 +119,6 @@ cnts_tsv_df = cnts_tsv_df.rename(columns={"s01": "MHP_start", "e2": "MHP_end"})
 
 # save
 tic = time.time()
-cnts_tsv_df.to_pickle( args.output_filename )
+cnts_tsv_df.to_feather( args.output_filename )
 toc = time.time()
-print(f"Saving as pickle took {(toc - tic)/60:0.2f} minutes to file : {args.output_filename :s} ")
-
-tic = time.time()
-cnts_tsv_df.to_hdf( "/Users/lcarey/Downloads/df.h5" , key='df', mode='w')
-toc = time.time()
-print(f"Saving as h5 took {(toc - tic)/60:0.2f} minutes.")
-
-tic = time.time()
-cnts_tsv_df.to_feather( "/Users/lcarey/Downloads/df.feather" )
-toc = time.time()
-print(f"Saving as feather took {(toc - tic)/60:0.2f} minutes.")
-
+print(f"Saving as feather took {(toc - tic)/60:0.2f} minutes to file : {args.output_filename :s} ")
