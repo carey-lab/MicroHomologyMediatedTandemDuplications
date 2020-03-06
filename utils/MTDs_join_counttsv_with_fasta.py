@@ -28,7 +28,9 @@ def GC(x):
 parser = argparse.ArgumentParser()
 parser.add_argument('--fasta', help='FASTA input filename')
 parser.add_argument('--countstsv', help='counts.tsv file produced by catch_signatures.awk')
-parser.add_argument('--output_filename', help='<file name to save dataframe>.feather')
+parser.add_argument('--output_basename', help='will save results into two files: <filename>.feather & <filename>.bed')
+parser.add_argument('--head', help='only process the first N MHPs. Default: 0, process all.' , default=0 , type=int)
+
 
 args = parser.parse_args()
 
@@ -53,6 +55,8 @@ print(f"... loaded. Adding Sequence data took {toc - tic:0.2f} seconds")
 #cnts_tsv_df = cnts_tsv_df.loc[ (cnts_tsv_df["chr"]=="I") ]
 #cnts_tsv_df = cnts_tsv_df.loc[ (cnts_tsv_df["chr"]=="I") | (cnts_tsv_df["chr"]=="II")  | (cnts_tsv_df["chr"]=="III")  ] 
 #cnts_tsv_df = cnts_tsv_df.loc[ (cnts_tsv_df["s1"] < 1000000) | (cnts_tsv_df["NDups"] > 0) ] 
+if args.head>0:
+    cnts_tsv_df = cnts_tsv_df.iloc[ 0:args.head , :]
 #cnts_tsv_df = cnts_tsv_df.reset_index(drop=True) # rebuild row numbers in the shrunken dataframe
 
 cnts_tsv_df["s01"] = cnts_tsv_df.s1 - 1
@@ -117,8 +121,16 @@ cnts_tsv_df = cnts_tsv_df.drop(columns=['s1', 'e1', 's2', 'e01', 's02', 'e02'])
 #give start and end column headers good names
 cnts_tsv_df = cnts_tsv_df.rename(columns={"s01": "MHP_start", "e2": "MHP_end"})
 
+#sort 
+cnts_tsv_df = cnts_tsv_df.sort_values( by=['chr','MHP_start','MHP_end'] , ascending=True )
+cnts_tsv_df = cnts_tsv_df.reset_index(drop=True)
+
 # save
 tic = time.time()
-cnts_tsv_df.to_feather( args.output_filename )
+cnts_tsv_df.to_feather( args.output_basename + '.feather' )
 toc = time.time()
-print(f"Saving as feather took {(toc - tic)/60:0.2f} minutes to file : {args.output_filename :s} ")
+print(f"Saving as feather took {(toc - tic)/60:0.2f} minutes to file : {args.output_basename :s} ")
+
+# output a .bed file with column header
+cnts_tsv_df = cnts_tsv_df.rename(columns={'chr' : '#chr'})
+cnts_tsv_df.to_csv( args.output_basename + '.bed' , sep='\t' , header=True , index=False) 
