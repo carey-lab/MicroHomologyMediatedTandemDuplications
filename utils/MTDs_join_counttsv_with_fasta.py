@@ -28,18 +28,22 @@ def GC(x):
 parser = argparse.ArgumentParser()
 parser.add_argument('--fasta', help='FASTA input filename')
 parser.add_argument('--countstsv', help='counts.tsv file produced by catch_signatures.awk')
-parser.add_argument('--output_basename', help='will save results into two files: <filename>.feather & <filename>.bed')
-parser.add_argument('--head', help='only process the first N MHPs. Default: 0, process all.' , default=0 , type=int)
+parser.add_argument('--output_basename', help='will save results into two files: <filename>.feather & <filename>.bed' , required=True)
+parser.add_argument('--head', help='only process the first N MHPs. Default: 0, process all.' , default=None , type=int)
+parser.add_argument('--calc-inter_MHP_GC', help='calculate GC content for inter-MHP sequences' , default=False  , action='store_true')
+parser.add_argument('--testing', help='set paramters for quick debugging' , default=False  , action='store_true')
 
 
 args = parser.parse_args()
 
 ## for development
 #os.chdir('/Users/lcarey/Downloads')
-#args.fasta = '/Users/lcarey/CareyLab/ExternalData/PomBase/pombe_n.fasta'
-#args.countstsv = '/Users/lcarey/CareyLab/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/DataFromCluster/SRR7817502_n.sign.count_500bp.tsv'
+if (args.testing==True):
+    args.fasta = '/Users/lcarey/CareyLab/ExternalData/PomBase/pombe_n.fasta'
+    args.countstsv = '/Users/lcarey/CareyLab/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/DataFromCluster/SRR7817502_n.sign.count_500bp.tsv'
+    args.head = 1000 
 
-# load input files
+
 print(args.fasta, ' is ', os.path.getsize(args.fasta), ' bytes')
 fa = pyfastx.Fasta(args.fasta)
 for s in fa:
@@ -47,7 +51,7 @@ for s in fa:
 
 print(args.countstsv, ' is ', os.path.getsize(args.countstsv), ' bytes')
 tic = time.time()
-cnts_tsv_df = pandas.read_csv(args.countstsv, sep='\t', names=["chr", "s1", "e1", "s2", "e2", "NDups", "NCol"])
+cnts_tsv_df = pandas.read_csv(args.countstsv, sep='\t', names=["chr", "s1", "e1", "s2", "e2", "NDups", "NCol"] , nrows=args.head)
 toc = time.time()
 print(f"... loaded. Adding Sequence data took {toc - tic:0.2f} seconds")
 
@@ -55,8 +59,6 @@ print(f"... loaded. Adding Sequence data took {toc - tic:0.2f} seconds")
 #cnts_tsv_df = cnts_tsv_df.loc[ (cnts_tsv_df["chr"]=="I") ]
 #cnts_tsv_df = cnts_tsv_df.loc[ (cnts_tsv_df["chr"]=="I") | (cnts_tsv_df["chr"]=="II")  | (cnts_tsv_df["chr"]=="III")  ] 
 #cnts_tsv_df = cnts_tsv_df.loc[ (cnts_tsv_df["s1"] < 1000000) | (cnts_tsv_df["NDups"] > 0) ] 
-if args.head>0:
-    cnts_tsv_df = cnts_tsv_df.iloc[ 0:args.head , :]
 #cnts_tsv_df = cnts_tsv_df.reset_index(drop=True) # rebuild row numbers in the shrunken dataframe
 
 cnts_tsv_df["s01"] = cnts_tsv_df.s1 - 1
@@ -87,7 +89,8 @@ s02=cnts_tsv_df['s02'].to_list()
 print('Extracting sequences...')
 for I in range(len(cnts_tsv_df)):
     MHseq[I] = fa.fetch( c[I] , (s1[I] , e1[I] ) )
-    interMHseq[I] = fa.fetch( c[I] , (e1[I]+1 , s02[I]) )
+    if (args.calc_inter_MHP_GC):
+        interMHseq[I] = fa.fetch( c[I] , (e1[I]+1 , s02[I]) )
 
 toc = time.time()
 cnts_tsv_df["MH_Sequence"] = MHseq
@@ -98,28 +101,32 @@ del s1,e1,s02,c,MHseq
 
 # addd GC content to df
 cnts_tsv_df["MH_Sequence_GC"] = cnts_tsv_df["MH_Sequence"].apply(GC)
-cnts_tsv_df["InterMH_Sequence_GC"] = list(map(GC,interMHseq))
-cnts_tsv_df["DuplicatedRegion_GC"] = cnts_tsv_df["MH_Sequence"].add(interMHseq).apply(GC)
-cnts_tsv_df["CompleteMHP_GC"] = cnts_tsv_df["MH_Sequence"].add( cnts_tsv_df["MH_Sequence"].add(interMHseq) ).apply(GC)
-
-cnts_tsv_df["Duplication_Creates_modulo3_insertion"] = (list(map(len,interMHseq))+cnts_tsv_df["MH_Sequence"].apply(len)) % 3==0
-
-# this  make files smaller 
 cnts_tsv_df["MH_Sequence_GC"] = cnts_tsv_df["MH_Sequence_GC"].astype('uint8')
-cnts_tsv_df["InterMH_Sequence_GC"] = cnts_tsv_df["InterMH_Sequence_GC"].astype('uint8')
-cnts_tsv_df["DuplicatedRegion_GC"] = cnts_tsv_df["DuplicatedRegion_GC"].astype('uint8')
-cnts_tsv_df["CompleteMHP_GC"] = cnts_tsv_df["CompleteMHP_GC"].astype('uint8')
+
 cnts_tsv_df["MH_length"] = cnts_tsv_df["MH_length"].astype('uint8')
 
-# other variables needed for predicting MTD frequency
-cnts_tsv_df['InterMH_Distance'] = list(map(len,interMHseq))
-cnts_tsv_df['InterMH_Distance'] = cnts_tsv_df['InterMH_Distance'].astype('uint16')
+
+if (args.calc_inter_MHP_GC):
+    cnts_tsv_df["InterMH_Sequence_GC"] = list(map(GC,interMHseq))
+    cnts_tsv_df["DuplicatedRegion_GC"] = cnts_tsv_df["MH_Sequence"].add(interMHseq).apply(GC)
+    cnts_tsv_df["CompleteMHP_GC"] = cnts_tsv_df["MH_Sequence"].add( cnts_tsv_df["MH_Sequence"].add(interMHseq) ).apply(GC)
+    cnts_tsv_df["InterMH_Sequence_GC"] = cnts_tsv_df["InterMH_Sequence_GC"].astype('uint8')
+    cnts_tsv_df["DuplicatedRegion_GC"] = cnts_tsv_df["DuplicatedRegion_GC"].astype('uint8')
+    cnts_tsv_df["CompleteMHP_GC"] = cnts_tsv_df["CompleteMHP_GC"].astype('uint8')
+
 
 # we only need to save the position columns needed to make a .bed file  : s01 & e2
 cnts_tsv_df = cnts_tsv_df.drop(columns=['s1', 'e1', 's2', 'e01', 's02', 'e02'])
 
 #give start and end column headers good names
 cnts_tsv_df = cnts_tsv_df.rename(columns={"s01": "MHP_start", "e2": "MHP_end"})
+
+
+# other variables needed for predicting MTD frequency
+cnts_tsv_df['InterMH_Distance'] = (cnts_tsv_df['MHP_end'] - cnts_tsv_df['MHP_start']  - 2 * cnts_tsv_df['MH_length']).astype('uint16')
+
+cnts_tsv_df["Duplication_Creates_modulo3_insertion"] = (cnts_tsv_df['InterMH_Distance'] + cnts_tsv_df["MH_length"]) % 3==0
+
 
 #sort 
 cnts_tsv_df = cnts_tsv_df.sort_values( by=['chr','MHP_start','MHP_end'] , ascending=True )
