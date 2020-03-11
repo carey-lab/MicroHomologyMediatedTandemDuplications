@@ -4,9 +4,9 @@
 
 //// 开始定义常数
 #define SK       4
-#define MK       15
+#define MK       25
 #define HSize    256 // 0000(4) ~ 3333(4)
-#define MAXINTVL 300 // 最大区间 100 bps
+#define MAXINTVL 500 // 最大区间 100 bps
 #define MININTVL 3   // 最小区间 3 + SK bps
 #define AAAA     0
 #define CCCC     85
