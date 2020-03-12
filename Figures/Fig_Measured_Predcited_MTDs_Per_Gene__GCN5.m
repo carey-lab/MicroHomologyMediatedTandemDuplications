@@ -4,6 +4,8 @@
 %  ubp8, where we also observed a single MTD in our high-coverage sequencing data. 
 %  These results suggest that MTDs likely exist at high frequency in most genes, 
 %  and are frequently the raw material on which natural selection acts. 
+%
+% LBC Febuary 2020
 
 DATADIR = '~/SynologyDrive/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/Sarah/MH_project/Manuscript-todo/processeddata/' ;
 FIGDIR  = '~/Nutstore Files/Microhomology shared folder/Figures/Fig2 - cis-determinants of MTD through ultra-deep sequencing/' ;
@@ -13,11 +15,13 @@ D.systematic_name = regexprep( regexprep( D.systematic_name , 'ID=','') , ';Name
 
 T = readtable([DATADIR 'MHRSumPreinGene.txt' ],'TreatAsEmpty','.');
 T.Properties.VariableNames = { 'chr'	'start1'	'end2' 'dunno'	'gene'	'systematic_name'	'sumObs'	'sumPre'	'sumFloat' 'dunno2'}; 
+
+
 T.GeneLength = abs(T.start1 - T.end2) ./ 1000 ; 
 T.SumFloat_N = T.sumFloat ./ T.GeneLength ; 
 T.sumObs_N = T.sumObs ./ T.GeneLength ; 
 T.sumPre_N = T.sumObs ./ T.GeneLength ; 
-T = sortrows(T,'sumFloat','ascend');
+T = sortrows(T,'sumFloat','descend');
 T.sumFloat_Rank = (1:height(T))' ;
 
 T = sortrows(T,'SumFloat_N','ascend');
@@ -25,8 +29,18 @@ T.sumFloat_N_Rank = (1:height(T))' ;
 
 
 T = innerjoin(D , T  , 'key' , 'systematic_name'); 
+ 
+%% save for supplementary table
+T.N_observed_MTDs = T.sumObs ; 
+T.N_predicted_MTDs = T.sumPre ; 
+T.sum_predicted_MHP_score = T.sumFloat ; 
+T.sum_predicted_MHP_score_Rank = T.sumFloat_Rank ; 
+T.sum_predicted_MHP_score_Rank( isnan(T.sum_predicted_MHP_score) ) = NaN ; 
+
+writetable(  T(:,{'gene'  'systematic_name' 'N_observed_MTDs' 'N_predicted_MTDs' 'sum_predicted_MHP_score' 'GeneLength' 'sum_predicted_MHP_score_Rank' 'N_MHPs'} )  ,  '~/Downloads/MTDs_per_gene.xlsx' );
+ 
 %% histogram distribution of MTDs per gene
-fh = figure('units','centimeters','position',[5 5 6 5]);
+fh = figure('units','centimeters','position',[5 5 5 6]);
 hold on ; 
 
 Y=T.sumObs;
@@ -35,22 +49,22 @@ Y(Y>=10)=10.5;
 Yn=T.sumObs_N;
 Yn(Yn>=10)=10.5;
 
-histogram(Y,-0.5:11 , 'FaceColor' , [0.9 0.9 0.9] );
+histogram(Y,-0.5:11);
 %histogram(Yn,-0.5:11);
 
 set(gca,'yscale','log')
 ylabel('# of genes')
-xlabel('Observed MTDs per gene')
+xlabel('Obs. MTDs per gene')
 set(gca,'xtick',[0 5 9.5])
 set(gca,'xticklabel',{'0' '5' '>=10'})
 set(gca,'ytick',[1 10 1e2 1e3 1e4 1e5])
 axis tight; 
 yl = ylim ;
 
-print('-dpng', [ FIGDIR 'Distribution_of_MTDs_per_gene' ] ,'-r600');
+print('-dpng', [ FIGDIR 'Distribution_of_MTDs_per_gene' ] ,'-r300');
 close
 
-%% normalized by gene length
+% normalized by gene length
 fh = figure('units','centimeters','position',[5 5 5 6]);
 hold on ; 
 

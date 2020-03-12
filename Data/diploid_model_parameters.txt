@@ -1,0 +1,7 @@
+feature	coeff	p
+MH length	1.66	1e-16
+GC content	0.42	1e-16
+interMH dist	1.52	1e-16
+nucleosome occ.	0.42	1e-10
+mRNA expression	0.186	1e-12
+closest MTD	0.15174	1e-8

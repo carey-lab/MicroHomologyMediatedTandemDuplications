@@ -1,4 +1,4 @@
-% Fig__Spombe_WholeGenome_10kDiploid_vs_SRR7817502haploid__EssentialGenes_SameRules
+% Compare E. coli vs S.pombe haploid vs S.pombe diploid
 % we have two high-coverage whole-genome S. pombe datasets: 10k, & SRR7817502
 % same MTDfrequency rules? 
 % 
@@ -7,77 +7,153 @@
 %
 
 %% load data
-F1 = '10k' ;
-F2 = 'Ecoli' ;
+D = '10k_rm.sign.count.tsv' ;
+H = 'SRR7817502_rm.sign.count.tsv' ;
+E = 'Ecoli.sign.count.tsv' ;
 DATADIR = '~/CareyLab/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/DataFromCluster/' ;
-D = readtable( [DATADIR F1 '_rm.sign.count.tsv']  , 'FileType','text','Delimiter','\t','Format','%s%d%d%d%d%d%d');
-H = readtable( [DATADIR F2 '.sign.count.tsv']  , 'FileType','text','Delimiter','\t','Format','%s%d%d%d%d%d%d');
+
+FIGDIR = '~/Nutstore Files/Microhomology shared folder/Figures/Supplementary Figures/' ; 
+FIGNAME = [ FIGDIR 'SupFig__Haploid_vs_Diploid_vs_Ecoli_MTDfreq__InterMH_Distance'  ] ; 
+
+vn = {'chr' 's1' 'e1' 's2' 'e2' 'NDup' 'NCol'}; 
+vt = {'string' 'uint32' 'uint32' 'uint32' 'uint32' 'uint32' 'uint32'}; 
+
+opts = delimitedTextImportOptions( 'Delimiter','\t', 'VariableNames', vn , 'VariableTypes', vt ) ;
+D = readtable( [DATADIR D]  , opts );
+H = readtable( [DATADIR H]  , opts );
+E = readtable( [DATADIR E]  , opts );
+
+D.strain = repmat( {'diploid'} , height(D),1);
+H.strain = repmat( {'haploid'} , height(H),1);
+E.strain = repmat( {'E. coli'} , height(E),1);
 
 
-D.Properties.VariableNames = {'chr' 's1' 'e1' 's2' 'e2' 'NDup' 'NCol'};
 D.HasDup = D.NDup>0;
 D.MHLen = D.e1 - D.s1 + 1 ; 
 D.InterMHDist = D.s2 - D.e1 + 1 ; 
 
 
-H.Properties.VariableNames = { 'chr' 's1' 'e1' 's2' 'e2' 'NDup' 'NCol'};
 H.HasDup = H.NDup>0;
 H.MHLen = H.e1 - H.s1 + 1 ; 
 H.InterMHDist = H.s2 - H.e1 + 1 ; 
 
-D.InterMHDistR = round(D.InterMHDist./10)*10 ;
-H.InterMHDistR = round(H.InterMHDist./10)*10 ;
-
-whos
-%
+E.HasDup = E.NDup>0;
+E.MHLen = E.e1 - E.s1 + 1 ; 
+E.InterMHDist = E.s2 - E.e1 + 1 ; 
 
 
-figure; 
+%%
+n=5; 
+D.InterMHDistR = round(double(D.InterMHDist)./n)*n ;
+H.InterMHDistR = round(double(H.InterMHDist)./n)*n ;
+E.InterMHDistR = round(double(E.InterMHDist)./n)*n ;
 
-subplot(2,2,1)
-hold on ;
-GD = grpstats( D(D.MHLen==4,:) , 'InterMHDistR' ,'mean' ,'DataVars' ,'HasDup');
-GH = grpstats( H(H.MHLen==4,:) , 'InterMHDistR' ,'mean' ,'DataVars' ,'HasDup');
-plot( GD.InterMHDistR  , 100*GD.mean_HasDup ,'o-','DisplayName',F1)
-plot( GH.InterMHDistR  , 100*GH.mean_HasDup ,'o-','DisplayName',F2)
-legend('location','ne')
-xlabel('Inter-MH distance (nt)')
-ylabel('% of MHPs with duplication')
-title('MHlength = 4')
-xlim([0 375])
 
-subplot(2,2,2)
-hold on ;
-GD = grpstats( D(D.MHLen==5,:) , 'InterMHDistR' ,'mean' ,'DataVars' ,'HasDup');
-GH = grpstats( H(H.MHLen==5,:) , 'InterMHDistR' ,'mean' ,'DataVars' ,'HasDup');
-plot( GD.InterMHDistR  , 100*GD.mean_HasDup ,'o-','DisplayName','10k diploid')
-plot( GH.InterMHDistR  , 100*GH.mean_HasDup ,'o-','DisplayName','SRR7817502 haploid')
-%legend('location','ne')
-xlabel('Inter-MH distance (nt)')
-ylabel('% of MHPs with duplication')
-title('MHlength = 5')
-xlim([0 375])
+T = vertcat(D,H);
+T = vertcat(T,E);
 
-subplot(2,2,3)
-hold on ;
-GD = grpstats( D(D.MHLen==6,:) , 'InterMHDistR' ,'mean' ,'DataVars' ,'HasDup');
-GH = grpstats( H(H.MHLen==6,:) , 'InterMHDistR' ,'mean' ,'DataVars' ,'HasDup');
-plot( GD.InterMHDistR  , 100*GD.mean_HasDup ,'o-','DisplayName',F1)
-plot( GH.InterMHDistR  , 100*GH.mean_HasDup ,'o-','DisplayName',F2)
-legend('location','ne')
-xlabel('Inter-MH distance (nt)')
-ylabel('% of MHPs with duplication')
-title('MHlength = 6')
-xlim([0 375])
+T.strain = categorical(T.strain); 
 
-subplot(2,2,4)
-hold on ;
-GD = grpstats( D(D.MHLen>=7,:) , 'InterMHDistR' ,'mean' ,'DataVars' ,'HasDup');
-GH = grpstats( H(H.MHLen>=7,:) , 'InterMHDistR' ,'mean' ,'DataVars' ,'HasDup');
-plot( GD.InterMHDistR  , 100*GD.mean_HasDup ,'o-','DisplayName','10k diploid')
-plot( GH.InterMHDistR  , 100*GH.mean_HasDup ,'o-','DisplayName','SRR7817502 haploid')
-%legend('location','ne')
-xlabel('Inter-MH distance (nt)')
-ylabel('% of MHPs with duplication')
-title('MHlength >= 7')
-xlim([0 375])
+T.InterMHDistR(T.InterMHDistR>300)=300; 
+T.MHLen(T.MHLen>6)=6; 
+
+G = grpstats( T , {'MHLen' 'InterMHDistR' 'strain'} , {'mean' 'sum'} , 'DataVars' , 'HasDup');
+Go=G;
+
+%%
+G=Go;
+G = G(G.GroupCount>1e3,:);
+
+e = 1e-2 ;
+yl = [0.01  1.6] ; 
+fh = figure('units','centimeters','position',[5 5  20 7]) ;
+t = tiledlayout(1,3 , 'Padding' , 'compact' , 'TileSpacing' , 'compact' );
+
+nexttile;
+gh = gscatter(  G.InterMHDistR(G.MHLen==4) , 100*G.mean_HasDup(G.MHLen==4)+e , G.strain(G.MHLen==4) );
+arrayfun(@(I)set(gh(I),'LineStyle','-') , 1:numel(gh)) ;
+title('MH length = 4')
+set(gca,'yscale','log')
+ylim(yl)
+set(gca,'yticklabel',{'0' '0.1' '1'});
+
+nexttile;
+gh =gscatter(  G.InterMHDistR(G.MHLen==5) , 100*G.mean_HasDup(G.MHLen==5)+e , G.strain(G.MHLen==5) ) ;
+arrayfun(@(I)set(gh(I),'LineStyle','-') , 1:numel(gh));
+title('MH length = 5')
+set(gca,'yscale','log')
+ylim(yl)
+set(gca,'yticklabel',{'0' '0.1' '1'});
+
+nexttile;
+gh = gscatter(  G.InterMHDistR(G.MHLen==6) , 100*G.mean_HasDup(G.MHLen==6)+e , G.strain(G.MHLen==6) );
+arrayfun(@(I)set(gh(I),'LineStyle','-') , 1:numel(gh));
+title('MH length >= 6')
+set(gca,'yscale','log')
+ylim(yl)
+set(gca,'yticklabel',{'0' '0.1' '1'});
+
+xlabel( t , 'Inter MH distance' , 'FontSize' , 15 )
+ylabel( t, '% of MHPs with an MTD' , 'FontSize' , 15 )
+
+print( '-dpng' , FIGNAME , '-r200');
+close ; 
+
+%% look at <50nt
+
+n=2; 
+D.InterMHDistR = round(double(D.InterMHDist)./n)*n ;
+H.InterMHDistR = round(double(H.InterMHDist)./n)*n ;
+E.InterMHDistR = round(double(E.InterMHDist)./n)*n ;
+
+
+T = vertcat(D,H);
+T = vertcat(T,E);
+
+T.strain = categorical(T.strain); 
+
+T.InterMHDistR(T.InterMHDistR>300)=300; 
+T.MHLen(T.MHLen>6)=6; 
+T = T(T.InterMHDist<50,:);
+
+G = grpstats( T , {'MHLen' 'InterMHDistR' 'strain'} , {'mean' 'sum'} , 'DataVars' , 'HasDup');
+%%
+
+e = 1e-2 ;
+yl = [0.01  1.6] ; 
+fh = figure('units','centimeters','position',[5 5  20 7]) ;
+t = tiledlayout(1,3 , 'Padding' , 'compact' , 'TileSpacing' , 'compact' );
+
+nexttile;
+gh = gscatter(  G.InterMHDistR(G.MHLen==4) , 100*G.mean_HasDup(G.MHLen==4)+e , G.strain(G.MHLen==4) );
+arrayfun(@(I)set(gh(I),'LineStyle','-') , 1:numel(gh)) ;
+title('MH length = 4')
+set(gca,'yscale','log')
+ylim(yl)
+set(gca,'yticklabel',{'0' '0.1' '1'});
+xlim([3 50])
+
+nexttile;
+gh =gscatter(  G.InterMHDistR(G.MHLen==5) , 100*G.mean_HasDup(G.MHLen==5)+e , G.strain(G.MHLen==5) ) ;
+arrayfun(@(I)set(gh(I),'LineStyle','-') , 1:numel(gh));
+title('MH length = 5')
+set(gca,'yscale','log')
+ylim(yl)
+set(gca,'yticklabel',{'0' '0.1' '1'});
+xlim([3 50])
+
+nexttile;
+gh = gscatter(  G.InterMHDistR(G.MHLen==6) , 100*G.mean_HasDup(G.MHLen==6)+e , G.strain(G.MHLen==6) );
+arrayfun(@(I)set(gh(I),'LineStyle','-') , 1:numel(gh));
+title('MH length >= 6')
+set(gca,'yscale','log')
+ylim(yl)
+set(gca,'yticklabel',{'0' '0.1' '1'});
+xlim([3 50])
+legend('off')
+xlabel( t , 'Inter MH distance' , 'FontSize' , 15 )
+ylabel( t, '% of MHPs with an MTD' , 'FontSize' , 15 )
+
+print( '-dpng' , [FIGNAME '_zoom'], '-r200');
+close ; 
+

@@ -1,7 +1,6 @@
 % a local clustering on the scale of 100nt
 % MHPs that are close to an observed MTD are more likely to have an MTD
 DIR = '/Users/lcarey/SynologyDrive/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/Sarah/MH_project/ProcessedData/';
-DIR = '/Users/lcarey/SynologyDrive/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/Sarah/MH_project/Manuscript-todo/processeddata/'
 %MTD = readtable([ DIR '10k.sign.count.tsv'] , 'FileType','text','Format','%s%d%d%d%d%d%d');
 %MTD.Properties.VariableNames = {'chr' 's1' 'e1' 's2' 'e2' 'NDups' 'NCol'} ;
 

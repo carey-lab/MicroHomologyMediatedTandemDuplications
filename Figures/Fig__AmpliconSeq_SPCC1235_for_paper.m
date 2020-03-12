@@ -32,6 +32,10 @@ for I = 1:height(R)
     [ ~,R.ttest_paired_not_zero_p(I) ]=ttest(log2r_notzero , WTbaseline(WTbaseline>0 & dupfrq>0));
     [ ~,R.ttest_paired_all_p(I) ]=ttest(log2r  , WTbaseline );
     R.Pct_MHPs_with_Dup(I)  = 100*mean(T.DupFrq(strcmp(T.chr,R.allstrains{I}))>0) ; 
+    R.Pct_MHPs_with_Dup_4(I)  = 100*mean(T.DupFrq(T.MHlen==4 & strcmp(T.chr,R.allstrains{I}))>0) ; 
+    R.Pct_MHPs_with_Dup_5(I)  = 100*mean(T.DupFrq(T.MHlen==5 & strcmp(T.chr,R.allstrains{I}))>0) ; 
+    R.Pct_MHPs_with_Dup_gt6(I)  = 100*mean(T.DupFrq(T.MHlen>=6 & strcmp(T.chr,R.allstrains{I}))>0) ; 
+    
     R.log2r__Pct_MHPs_with_Dup_over_WT(I)  = log2( R.Pct_MHPs_with_Dup(I) ./ mean(mean(wtbaseline_datamat>0)*100))  ; 
 
 end
@@ -44,11 +48,13 @@ R.genotype = regexprep( R.genotype , '^[12]$','WT');
 G = grpstats( R , 'genotype' ,'mean' ,'datavars' , R.Properties.VariableNames(2:end-1));
 G.genotype = regexprep( G.genotype , 'd$','\\Delta');
 
+G.genotype{strcmp(G.genotype,'rad27\Delta')} = 'rad2\Delta' ;
+
 %writetable( R , '~/Downloads/AmpliconLib3__DuplicationFreqInMutants_RelativeToWT.xlsx') ;
 %%
 
 % Figure for publication
-fh = figure('units','centimeters','position',[5 5  6 9]) ;
+fh = figure('units','centimeters','position',[5 5  6 8]) ;
 hold on ;
 bar( G.mean_Pct_MHPs_with_Dup(1:3) ,'FaceColor',[.8 .8 .8]);
 plot( [1 1 2 2 3 3 ] , R.Pct_MHPs_with_Dup(1:6) , 'ok' ,'MarkerSize',5)
@@ -57,7 +63,7 @@ set(gca,'xtick',1:3)
 set(gca,'xticklabel',G.genotype(1:3));
 ylabel('% of MHPairs with an MTD');
 
-fh = figure('units','centimeters','position',[5 5  6 9]) ;
+fh = figure('units','centimeters','position',[5 5  6 8]) ;
 hold on ;
 bar( G.mean_mean_log10_dupfreq(1:3) ,'FaceColor',[.8 .8 .8]);
 plot( [1 1 2 2 3 3 ] , R.mean_log10_dupfreq(1:6) , 'ok' ,'MarkerSize',5)
@@ -67,7 +73,7 @@ set(gca,'xticklabel',G.genotype(1:3));
 ylabel('Mean MTD frequency (log_{10})');
 ylim([0.7 1.3])
 
-
+%%
 datamat = [T.DupFrq( strcmp(T.chr,'SPCC1235.01.1')) T.DupFrq( strcmp(T.chr,'SPCC1235.01.2')) ] ; 
 WT = mean( datamat , 2 );  
 

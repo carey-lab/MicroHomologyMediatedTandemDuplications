@@ -1,10 +1,3 @@
-% SupFig__ReadLenght_DoesNotDetermine_150nt_spacing
-% determine if the 150nt inter-MH-Pair spacing from the diploid 10k sequencing is due to 
-%   the 150nt readlength: trim 50nt from the front or back of each read, and recalculate
-% 
-%  also determine if shorter reads have more short inter-MHPs because insertions more likely to be softclipped
-%
-%
 DATADIR = '~/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/DataFromCluster/';
 T0= readtable( [DATADIR '10k_rm.sign.count.tsv'],'FileType','text','Format','%s%d%d%d%d%d%d');
 T1= readtable( [DATADIR 'trimmed_crop100.sign.count.tsv'],'FileType','text','Format','%s%d%d%d%d%d%d');
@@ -43,36 +36,32 @@ G1 = grpstats(T1,{'InterMHDistR' 'MHLenR'},{'mean'},'DataVars','HasDup');
 G2 = grpstats(T2,{'InterMHDistR' 'MHLenR'},{'mean'},'DataVars','HasDup');
 %%
 
-fh = figure('units','centimeters','position',[5 5  18 18]) ; 
-t = tiledlayout(2,2);
+fh = figure('units','centimeters','position',[5 5  8 25]) ; 
+t = tiledlayout(3,1);
 nexttile;
 gscatter(G0.InterMHDistR,(100*G0.mean_HasDup)+1e-3,G0.MHLenR)
 set(gca,'yscale','log')
 title('2x150nt full length reads')
-xlabel('nt between MHPair','FontSize',15)
+xlabel('nt between MHPair')
+legend({'MHL=4' 'MHL=5' 'MHL>=6'} , 'location','NorthOutside')
 set(gca,'ytick',[1e-4 1e-3 1e-2 1e-1 1])
-legend('off')
 
 nexttile;
 gscatter(G1.InterMHDistR,(100*G1.mean_HasDup)+1e-3,G1.MHLenR)
 set(gca,'yscale','log')
-title('50nt trimmed from end of read')
-xlabel('nt between MHPair','FontSize',15)
+title('50nt removed from end of read')
+xlabel('nt between MHPair')
 legend('off')
 set(gca,'ytick',[1e-4 1e-3 1e-2 1e-1 1])
 
 nexttile;
 gscatter(G2.InterMHDistR,(100*G2.mean_HasDup)+1e-3,G2.MHLenR)
 set(gca,'yscale','log')
-title('50nt trimmed from start of read')
-xlabel('nt between MHPair','FontSize',15)
+title('50nt removed from start of read')
+xlabel('nt between MHPair')
 legend('off')
 set(gca,'ytick',[1e-4 1e-3 1e-2 1e-1 1])
-legend('off')
 
-%xlabel(t,'nt between MHPair','FontSize',15)
-ylabel(t,'% of MHPairs with an MTD','FontSize',15)
-print('-dpng','~/Downloads/SupFig__ReadLenght_DoesNotDetermine_150nt_spacing','-r200')
 
-legend({'MH Length = 4' 'MH Length = 5' 'MH Length >= 6'} , 'location','EastOutside')
-print('-dpng','~/Downloads/SupFig__ReadLenght_DoesNotDetermine_150nt_spacing__lengend','-r400')
+ylabel(t,'% of MHPs with an MTD')
+print('-dpng','~/Downloads/SupFig__ReadLenght_DoesNotDetermine_150nt_spacing','-r600')

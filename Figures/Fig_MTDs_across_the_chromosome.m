@@ -59,7 +59,7 @@ set(gca,'TickLength',[0 0])
 % axis tight; 
 
 title(t,'MHPairs and predicted & observed MTDs across chromosome I')
-xlabel(t,'Position on chromosome (kb)')
+xlabel(t,'Position on chromosome (kb)','FontSize',15)
 print('-dpng',[FIGBASENAME 'A'],'-r150');
 close ; 
 
@@ -72,7 +72,7 @@ Q = T(T.locR == 4000,:);
 
 xt = 0:20:1e5 ; 
 
-fh = figure('units','centimeters','position',[5 5  7 10]) ;
+fh = figure('units','centimeters','position',[5 5  12 10]) ;
 t = tiledlayout(3,1,'TileSpacing','none','Padding','none') ; 
 nexttile
 plot( Q.loc , Q.sumMHR ,'Color',clrs(1,:) )
@@ -101,7 +101,7 @@ set(gca,'xtick',xt);
 % ylabel('MTD prediction score')
 % axis tight; 
 
-xlabel(t,'Position on chromosome (kb)')
+xlabel(t,'Position on chromosome (kb)','FontSize',15)
 title(t,'hot spot in chrI')
 print('-dpng',[FIGBASENAME 'H'],'-r300');
 close ; 
@@ -114,7 +114,7 @@ R(R.obs_over_mhr<prctile(R.obs_over_mhr,10) &  R.mean_sumObs<prctile(R.mean_sumO
 Q = T(T.locR ==  1300 ,:);
 xt = 0:20:1e5 ; 
 
-fh = figure('units','centimeters','position',[5 5  7 10]) ;
+fh = figure('units','centimeters','position',[5 5  12 10]) ;
 t = tiledlayout(3,1,'TileSpacing','none','Padding','none') ; 
 nexttile
 plot( Q.loc , Q.sumMHR ,'Color',clrs(1,:) )
@@ -143,7 +143,7 @@ set(gca,'xtick',xt);
 % ylabel('MTD prediction score')
 % axis tight; 
 
-xlabel(t,'Position on chromosome (kb)')
+xlabel(t,'Position on chromosome (kb)','FontSize',15)
 title(t,'cold spot in chrI')
 print('-dpng',[FIGBASENAME 'C'],'-r300');
 close ; 
