@@ -1,12 +1,16 @@
 setwd("E:\\work\\Projects\\2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU\\Sarah\\new_MH_project\\ProcessedData")
-containedInFeature <- read.table("10k.SZ=25.sign.count.tsv.containedInFeature.txt",header = F,as.is = T)
+containedInFeature <- read.table("10k.SZ=10.sign.count.tsv.containedInFeature.txt",header = F,as.is = T)
 colnames(containedInFeature) <- c("MHlen","interMH","duplication","interGene","geneName")
 containedInFeature$dup <- containedInFeature$duplication
 containedInFeature$dup[containedInFeature$dup!=0]=1 #binary dupication: turn 1,2,3 to 0   
 containedInFeature$duplen <- containedInFeature$MHlen+containedInFeature$interMH
-attach(containedInFeature)
-  
+save(containedInFeature,file = "containedInFeatureSZ=10.Rdata")
 
+  
+#####intergenic and within gene MHPs#######
+setwd("E:\\work\\Projects\\2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU\\Sarah\\new_MH_project\\ProcessedData")
+load("containedInFeatureSZ=10.Rdata")
+attach(containedInFeature)
 a <-  containedInFeature[interGene=="intergenic",c("MHlen","duplen")]
 a[as.numeric(a$MHlen)>=7,"MHlen"]=7
 b <- as.data.frame(table(a))
