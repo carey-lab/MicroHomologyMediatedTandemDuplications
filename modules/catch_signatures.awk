@@ -53,7 +53,8 @@ NR != FNR { # 第二个文件为去掉头的 sam 文件，可以用 samtools vie
 				if (length(pos[$3, 1, $4]) > 0) for (i in pos[$3, 1, $4]) {
 					# 如果有的话，对于每一个 MH pair 检查其对应的特征序列是否与 read 上的特征序列一致
 					if (sign_read == sign[i]["h2l"]) {
-						# print "        Found signature #" i, "I LC" # debug
+						print "        Found signature #" i, "I LC"  > "/dev/stderr" # debug
+						print $0 > "/dev/stderr
 						sign[i]["icount"] ++
 					}
 				}
@@ -76,7 +77,8 @@ NR != FNR { # 第二个文件为去掉头的 sam 文件，可以用 samtools vie
 				# 找到 read 在参考序列上的结束位置，即右剪切的位点
 				if (length(pos[$3, 4, ep]) > 0) for (i in pos[$3, 4, ep]) {
 					if (seg[j-1] > SZ && sign_read == sign[i]["h1r"]) {
-						# print "        Found signature #" i, "I RC" # debug
+						print "        Found signature #" i, "I RC" > "/dev/stderr" # debug
+						print $0 > "/dev/stderr
 						sign[i]["icount"] ++
 					}
 				}
@@ -97,7 +99,8 @@ NR != FNR { # 第二个文件为去掉头的 sam 文件，可以用 samtools vie
 				if (cig[j] == "I") {
 					if (length(pos[$3, 1, ins]) > 0) for (i in pos[$3, 1, ins]) { 
 						if (sign[i][3]-sign[i][1] == seg[j] && substr($10, sp, seg[j]) == sign[i]["ind"]) {
-							# print "        Found signature #" i, "I Inside" # debug
+							print "        Found signature #" i, "I Inside"  > "/dev/stderr" # debug
+							print $0 > "/dev/stderr
 							sign[i]["icount"] ++
 						}
 					}
