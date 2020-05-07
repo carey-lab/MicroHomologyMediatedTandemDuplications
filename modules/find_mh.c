@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <ctype.h>
 
 //// 开始定义常数
 #define SK       4
@@ -281,7 +282,7 @@ int main(int argc, char * argv[]) {
         // 提示用法     find_mh 输出文件的前缀
     } else {
         while (1) {
-            c = getchar(); // 从标准输入抓取一个字符
+            c = toupper(  getchar() ) ; // 从标准输入抓取一个字符 .   lower-case (usually repeat-masked) breaks counting w/out toupper()
             switch(c) {
                 case EOF :                          // 输入流结束 或者
                 case '>' :                          // 检测到标记序列开始的符号 >

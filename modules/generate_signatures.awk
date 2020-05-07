@@ -19,7 +19,7 @@ NR == FNR { # 首先将 fasta 文件读入内存
 	}
 	else {
 		if (block == 0) g[sname[nname], "b"] = length($0)
-		g[sname[nname], block] = $0
+		g[sname[nname], block] = toupper( $0 )
 		block += length($0)
 		g[sname[nname], "l"] = block
 	}
