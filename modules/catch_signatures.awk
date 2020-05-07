@@ -1,4 +1,6 @@
-#! /usr/local/bin/gawk -f
+#!/bin/sh
+true + /; exec -a "$0" gawk -f "$0" -- "$@"; / {}
+# awk script below ( https://unix.stackexchange.com/questions/97141/distributing-a-script-should-i-use-bin-gawk-or-usr-bin-gawk-for-shebang )
 
 BEGIN {
 	if (SZ == "") SZ = 10
@@ -54,7 +56,7 @@ NR != FNR { # 第二个文件为去掉头的 sam 文件，可以用 samtools vie
 					# 如果有的话，对于每一个 MH pair 检查其对应的特征序列是否与 read 上的特征序列一致
 					if (sign_read == sign[i]["h2l"]) {
 						print "        Found signature #" i, "I LC"  > "/dev/stderr" # debug
-						print $0 > "/dev/stderr
+						print  $0  > "/dev/stderr"
 						sign[i]["icount"] ++
 					}
 				}
@@ -78,7 +80,7 @@ NR != FNR { # 第二个文件为去掉头的 sam 文件，可以用 samtools vie
 				if (length(pos[$3, 4, ep]) > 0) for (i in pos[$3, 4, ep]) {
 					if (seg[j-1] > SZ && sign_read == sign[i]["h1r"]) {
 						print "        Found signature #" i, "I RC" > "/dev/stderr" # debug
-						print $0 > "/dev/stderr
+						print  $0  > "/dev/stderr"
 						sign[i]["icount"] ++
 					}
 				}
@@ -100,7 +102,7 @@ NR != FNR { # 第二个文件为去掉头的 sam 文件，可以用 samtools vie
 					if (length(pos[$3, 1, ins]) > 0) for (i in pos[$3, 1, ins]) { 
 						if (sign[i][3]-sign[i][1] == seg[j] && substr($10, sp, seg[j]) == sign[i]["ind"]) {
 							print "        Found signature #" i, "I Inside"  > "/dev/stderr" # debug
-							print $0 > "/dev/stderr
+							print  $0  > "/dev/stderr"
 							sign[i]["icount"] ++
 						}
 					}

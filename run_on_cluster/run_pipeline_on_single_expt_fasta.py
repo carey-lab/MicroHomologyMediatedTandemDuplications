@@ -1,4 +1,4 @@
-#!/home/lucas_pkuhpc/anaconda3/bin/python
+#!/home/lucas_pkuhpc/anaconda3/bin/python3
 import sys
 import os
 import argparse
@@ -15,10 +15,10 @@ ap.add_argument("-g", "--genome_fasta_file", required=True, help="FASTA file wit
 ap.add_argument("-r1", "--read1", required=True,  help="FASTQ file first read")
 ap.add_argument("-r2", "--read2", required=False, help="FASTQ file second read" , default=' ')
 ap.add_argument("-fmh", "--find_mh", required=False, help="path to find_mh binary" , default='/lustre2/lucas_pkuhpc/bin/find_mh')
-ap.add_argument("-cs", "--catch_signatures", required=False, help="cmd for catch_signatures.awk" , default='/usr/bin/gawk -v SZ=25 -f /home/lucas_pkuhpc/Develop/MicroHomologyMediatedIndels/modules/catch_signatures.awk')
-ap.add_argument("-gs", "--generate_signatures", required=False, help="cmd for generate_signatures.awk" , default='/usr/bin/gawk -v SZ=25 -f /home/lucas_pkuhpc/Develop/MicroHomologyMediatedIndels/modules/generate_signatures.awk')
-ap.add_argument("-nc", "--normalize_count", required=False, help="cmd for normalize_count.awk" , default='/usr/bin/gawk -f /home/lucas_pkuhpc/Develop/MicroHomologyMediatedIndels/modules/normalize_count.awk')
-ap.add_argument("-sb", "--sigtobed", required=False, help="cmd for sigtobed.awk" , default='/usr/bin/gawk -f /home/lucas_pkuhpc/Develop/MicroHomologyMediatedIndels/modules/sigtobed.awk')
+ap.add_argument("-cs", "--catch_signatures", required=False, help="cmd for catch_signatures.awk" , default='/usr/bin/gawk -f /home/lucas_pkuhpc/Develop/MicroHomologyMediatedTandemDuplications/modules/catch_signatures.awk')
+ap.add_argument("-gs", "--generate_signatures", required=False, help="cmd for generate_signatures.awk" , default='/usr/bin/gawk -f /home/lucas_pkuhpc/Develop/MicroHomologyMediatedTandemDuplications/modules/generate_signatures.awk')
+ap.add_argument("-nc", "--normalize_count", required=False, help="cmd for normalize_count.awk" , default='/usr/bin/gawk -f /home/lucas_pkuhpc/Develop/MicroHomologyMediatedTandemDuplications/modules/normalize_count.awk')
+ap.add_argument("-sb", "--sigtobed", required=False, help="cmd for sigtobed.awk" , default='/usr/bin/gawk -f /home/lucas_pkuhpc/Develop/MicroHomologyMediatedTandemDuplications/modules/sigtobed.awk')
 ap.add_argument("-bwa", "--bwa", required=False, help="path to bwa binary" , default='/lustre2/lucas_pkuhpc/bin/bwa')
 ap.add_argument("-t", "--nthreads", required=False, help="number of threads" , default=1 , type=int)
 ap.add_argument("-f", "--force_overwrite_flag", help="run all cmds even if the output files already exist" , action="store_true" )
@@ -137,7 +137,7 @@ else:
 #extract the sites found & compress the original
     cmd2 = 'gzip --force --best ' + args.base_name + '.sign.count.tsv'
     subprocess.run(  cmd2  ,  shell=True , check=True)
-    cmd = 'gunzip -c ' + args.base_name + '.sign.count.tsv.gz | grep -Pv \'\t0\t0$\' ' + args.base_name + '.sign.count.tsv | perl -ne \'chomp ; print "$_\t' + args.base_name + '\n" ; \' > ' + args.base_name + '.sites_found.txt'
+    cmd = 'gunzip -c ' + args.base_name + '.sign.count.tsv.gz | cut -f 1-6 | grep -Pv \'\t0$\' | perl -ne \'chomp ; print "$_\t' + args.base_name + '\n" ; \' > ' + args.base_name + '.sites_found.txt'
     print( cmd ) 
     subprocess.run(  cmd  ,  shell=True , check=True)
 
@@ -154,7 +154,7 @@ if (args.run_counts_normalization_flag):
         subprocess.run(  cmd  ,  shell=True , check=True)
 
     # (3) normalize_count creates the final output file
-    #gunzip -c AmpliconLib_E3_Library_4.sign.count.tsv.gz | /usr/bin/gawk -f /home/lucas_pkuhpc/Develop/MicroHomologyMediatedIndels/modules/normalize_count.awk AmpliconLib_E3_Library_4.cov  - 
+    #gunzip -c AmpliconLib_E3_Library_4.sign.count.tsv.gz | /usr/bin/gawk -f /home/lucas_pkuhpc/Develop/MicroHomologyMediatedTandemDuplications/modules/normalize_count.awk AmpliconLib_E3_Library_4.cov  - 
     #cmd = args.normalize_count + ' ' + args.base_name + '.cov' +  '   ' + args.base_name + '.sign.count.tsv'  + ' > ' + args.base_name + '.sign.norm.tsv'
     if os.path.isfile( args.base_name + '.sign.norm.tsv'):
         if os.path.getsize(args.base_name + '.sign.norm.tsv') < 1000 :
