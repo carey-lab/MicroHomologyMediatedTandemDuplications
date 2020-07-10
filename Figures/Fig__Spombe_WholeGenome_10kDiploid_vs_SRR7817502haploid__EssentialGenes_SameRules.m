@@ -10,7 +10,7 @@
 D = '10k_rm.sign.count.tsv' ;
 H = 'SRR7817502_rm.sign.count.tsv' ;
 E = 'Ecoli.sign.count.tsv' ;
-DATADIR = '~/CareyLab/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/DataFromCluster/' ;
+DATADIR = '/Volumes/CareyLab/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/DataFromCluster/FirstSubmission/' ;
 
 FIGDIR = '~/Nutstore Files/Microhomology shared folder/Figures/Supplementary Figures/' ; 
 FIGNAME = [ FIGDIR 'SupFig__Haploid_vs_Diploid_vs_Ecoli_MTDfreq__InterMH_Distance'  ] ; 
@@ -154,6 +154,6 @@ legend('off')
 xlabel( t , 'Inter MH distance' , 'FontSize' , 15 )
 ylabel( t, '% of MHPs with an MTD' , 'FontSize' , 15 )
 
-print( '-dpng' , [FIGNAME '_zoom'], '-r200');
-close ; 
+%print( '-dpng' , [FIGNAME '_zoom'], '-r200');
+%close ; 
 

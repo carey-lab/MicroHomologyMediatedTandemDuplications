@@ -1,4 +1,4 @@
-C = readtable('~/SynologyDrive/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/DataFromCluster/wt_polh_subset.MTD.counts.txt');
+C = readtable('~/SynologyDrive/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/DataFromCluster/wt_polh_subset.MTD.counts__0x02_q4.txt');
 C.HasMTD = C.Var6 > 0 ; C.Var6 = [] ;
 C.HasMTC = C.Var7 > 0 ; C.Var7 = [] ;
 C.CHR = regexprep(C.Var1 , 'CHROMOSOME_'  , ''); C.Var1 = [];
@@ -20,7 +20,7 @@ for I = 1:height(A)
 end
 A.Var10 = []; A.Var11 = []; A.Var12 = [];A.Var13 = [];A.Var14 = [];
 
-%%
+%
 T = outerjoin( C , A , 'LeftKey','Var8' ,'RightKey','ID');
 T = T( ~isnan(T.Var2_C),:);
 
@@ -66,3 +66,11 @@ gscatter(G.MTDs_per_MillionReads , G.MTCs_per_MillionReads , G.Var3_A );
 ylabel('MT COLLs (per million reads)')
 xlabel('MT DUPs(per million reads)')
 lh = line(xlim,xlim);set(lh,'HandleVisibility','off')
+
+%%
+[p,tbl,stats] = anova1( G.MTDs_per_MillionReads , G.Var3_A , 'off' );
+multcompare( stats )
+
+%%
+[p,tbl,stats] = anova1( log2( G.sum_HasMTD ./ G.sum_HasMTC ) , G.Var3_A , 'off' );
+multcompare( stats )
