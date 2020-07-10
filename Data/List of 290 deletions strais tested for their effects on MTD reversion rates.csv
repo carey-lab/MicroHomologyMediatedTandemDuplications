@@ -1,0 +1,291 @@
+﻿Systematic ID,Name,Product description,UniProt ID
+SPBC713.06,adl1,DNA ligase (predicted),Q9C1W9
+SPCC622.17,apn1,"AP endonuclease, minor transcript isoform Apn1",P50525
+SPBC3D6.10,apn2,AP-endonuclease Apn2,P87175
+SPCC962.05,ast1,"nuclease, XP-G family protein Ast1",O14061
+SPAC139.01c,ath2,"Ath1 complex protein Ath2 nuclease, XP-G family",Q9UTN2
+SPAC1250.04c,atl1,alkyltransferase-like protein Atl1,Q9UTN9
+SPBC582.05c,brc1,BRCT domain protein Brc1,Q10337
+SPAC27E2.05,cdc1,DNA polymerase delta small subunit Cdc1,P87324
+SPBC582.03,cdc13,G2/M B-type cyclin Cdc13,P10815
+SPAC20G8.01,cdc17,ATP-dependent DNA replication ligase Cdc17,P12000
+SPBC11B10.09,cdc2,cyclin-dependent protein kinase Cdk1/Cdc2,P04551
+SPBC25H2.13c,cdc20,DNA polymerase epsilon catalytic subunit Pol2,P87154
+SPAC8F11.07c,cdc24,DNA replication protein Cdc24,O75004
+SPBC1734.02c,cdc27,DNA polymerase delta subunit Cdc27,P30261
+SPBC336.04,cdc6,DNA polymerase delta catalytic subunit Cdc6,P30316
+SPBC12D12.02c,cdm1,DNA polymerase delta subunit Cdm1,O59835
+SPAC3G6.11,chl1,ATP-dependent DNA helicase Chl1 (predicted),O14147
+SPBC577.09,ckn1,ERCC-8 DNA repair homolog,Q9USR0
+SPAC4G9.11c,cmb1,cytosine-mismatch binding protein 1,Q10241
+SPBC342.05,crb2,DNA repair protein Rad9 homolog Crb2,P87074
+SPCC338.08,ctp1,CtIP-related endonuclease,O74986
+SPCC553.01c,dbl2,DNA recombination protein Dbl2,O74939
+SPAC17H9.10c,ddb1,Cul4-RING E3 adaptor Ddb1,O13807
+SPAC23H3.15c,ddr48,DNA damage-responsive protein ortholog DDr48,P78890
+SPBC354.10,def1,RNAPII degradation factor Def1 (predicted),O43024
+SPAC8E11.03c,dmc1,RecA family ATPase Dmc1,O42634
+SPBC16D10.04c,dna2,DNA replication endonuclease-helicase Dna2,Q9URU2
+SPBC691.02c,drp1,RINT1 family protein (predicted),Q9C0W8
+SPAC6F6.09,eaf6,Mst2/NuA4 histone acetyltransferase complex subunit Eaf6,O14240
+SPBC16A3.19,eaf7,histone acetyltransferase complex subunit Eaf7,O42924
+SPBC947.11c,elg1,DNA replication factor C complex subunit Elg1,O43086
+SPAPB1E7.06c,eme1,Holliday junction resolvase subunit Eme1,Q9C103
+SPCC830.05c,epl1,NuA4 histone acetyltransferase complex Epl1,Q9UU94
+SPBC16A3.11,eso1,mitotic cohesin N-acetyltransferase/DNA polymerase eta Eso1 fusion protein,O42917
+SPBC29A10.05,exo1,exonuclease I Exo1,P53695
+SPBC146.06c,fan1,Fanconi-associated nuclease Fan1,Q9Y804
+SPBC336.01,fbh1,"DNA helicase I, ubiquitin ligase F-box adaptor Fbh1",Q9USU3
+SPAC9.05,fml1,"ATP-dependent 3' to 5' DNA helicase, FANCM ortholog Fml1",Q9UT23
+SPAC20H4.04,fml2,ATP-dependent 3' to 5' DNA helicase (predicted),Q9HE09
+SPBC3H7.15,hhp1,serine/threonine protein kinase Hhp1,P40235
+SPAC23C4.12,hhp2,serine/threonine protein kinase Hhp2,P40236
+SPCC18.09c,hnt3,aprataxin Hnt3,O74859
+SPAC23A1.19c,hrq1,RecQ type DNA helicase Hrq1 (predicted),O13983
+SPAC1783.04c,hst4,Sirtuin family histone deacetylase Hst4,Q9UR39
+SPCC622.08c,hta1,histone H2A alpha,P04909
+SPAC19G12.06c,hta2,histone H2A beta,P04910
+SPAC29B12.01,ino80,SNF2 family ATP-dependent 3' to 5' DNA helicase Ino80,O14148
+SPAC3A11.05c,kms1,meiotic spindle pole body KASH domain protein Kms1,P87245
+SPCC553.07c,kpa1,"DinB translesion DNA repair polymerase, pol kappa",O74944
+SPCC1183.05c,lig4,DNA repair ligase Lig4,O74833
+SPBC887.04c,lub1,WD repeat protein Lub1,O94289
+SPAPB24D3.04c,mag1,DNA-3-methyladenine glycosylase Mag1,Q92383
+SPBC23G7.11,mag2,DNA-3-methyladenine glycosidase Mag2,O94468
+SPBC211.04c,mcm6,MCM complex subunit Mcm6,P49731
+SPBC30D10.08,mgm101,mitochondrial DNA repair protein (predicted),O14354
+SPAC26H5.02c,mgs1,DNA replication ATPase Mgs1 (predicted),O13984
+SPBC2D10.16,mhf1,"kinetochore protein, CENP-S ortholog, FANCM-MHF complex subunit Mhf1",O74807
+SPCC576.12c,mhf2,"kinetochore protein, CENP-X ortholog, FANCM-MHF complex subunit Mhf2",O74896
+SPBC1703.04,mlh1,MutL family protein Mlh1 (predicted),Q9P7W6
+SPAC3H8.05c,mms1,Cul8-RING ubiquitin ligase complex subunit Mms1 (predicted),Q10141
+SPCC338.05c,mms2,ubiquitin conjugating enzyme Mms2,O74983
+SPAC13C5.07,mre11,Mre11 nuclease,Q09683
+SPAC13F5.01c,msh1,mitochondrial MutS protein Msh1 (predicted),O13921
+SPBC19G7.01c,msh2,MutS protein homolog 2,O74773
+SPAC8F11.03,msh3,MutS protein homolog 3,P26359
+SPCC285.16c,msh6,MutS protein homolog,O74502
+SPAC637.12c,mst1,KAT5 family histone acetyltransferase Mst1,O94446
+SPCC417.07c,mto1,gamma tubulin complex linker Mto1,O94488
+SPAC6B12.02c,mus7,DNA repair protein Mus7/Mms22,O14207
+SPCC4G3.05c,mus81,Holliday junction resolvase subunit Mus81,P87231
+SPAC26A3.02,myh1,adenine DNA glycosylase Myh1,Q10159
+SPBC6B1.09c,nbs1,Mre11 complex subunit Nbs1,O43070
+SPAC10F6.08c,nht1,Ino80 complex HMG box subunit Nht1,O42648
+SPCC550.05,nse1,Smc5-6 complex ubiquitin-protein ligase E3 subunit Nse1,Q53EK2
+SPAC16A10.06c,nse2,Smc5-6 complex non-SMC SUMO ligase subunit Nse2,Q4PIR3
+SPCC645.04,nse3,Smc5-6 complex non-SMC MAGE family subunit Nse3,Q9Y7U4
+SPBC20F10.04c,nse4,Smc5-6 complex non-SMC delta-kleisin subunit Nse4,Q6BDR8
+SPAC30D11.07,nth1,DNA endonuclease III,Q09907
+SPBC16D10.09,pcn1,PCNA,Q03392
+SPAC3A11.08,pcu4,cullin 4,O14122
+SPBC887.14c,pfh1,"5' to 3' DNA helicase, involved in DNA recombination and repair Pif1",Q9UUA2
+SPCC126.02c,pku70,Ku domain protein Pku70,O94395
+SPBC543.03c,pku80,Ku domain protein Pku80,Q9HGM8
+SPAC1687.05,pli1,SUMO E3 ligase Pli1,O94451
+SPBC776.18c,pmh1,"transcription factor TFIIK complex complex ubiquitin-protein ligase E3 subunit, Pmh1",O94684
+SPAC19G12.02c,pms1,MutL family mismatch-repair protein Pms1,P54280
+SPAC3G9.08,png1,ING family homolog Png1,O42871
+SPAC23C11.04c,pnk1,DNA kinase/phosphatase Pnk1,O13911
+SPAC3H5.06c,pol1,DNA polymerase alpha catalytic subunit,P28040
+SPAC2F7.06c,pol4,DNA polymerase X family,Q09693
+SPBC26H8.05c,ppe2,"serine/threonine protein phosphatase, PP4 complex subunit Ppe2",O74789
+SPAC29A4.08c,prp19,"Prp19 complex subunit, ubiquitin-protein ligase E4 Prp19",O14011
+SPAC22A12.01c,pso2,DNA 5' exonuclease (predicted),Q10264
+SPBC1734.16c,pst3,SIN3 family co-repressor Pst3,O74755
+SPBC216.01c,psy2,protein phosphatase PP4 complex regulatory subunit 3 Psy2 (predicted),Q9Y7J8
+SPAC17A5.06,ptr8,transcription factor TFIIH complex DNA helicase (ERCC-3) subunit Ptr8,O13768
+SPCC1322.02,pxd1,structure-specific DNA nuclease regulator Pxd1,O94542
+SPBC3E7.08c,rad13,DNA repair nuclease Rad13,P28706
+SPAC1D4.12,rad15,transcription factor TFIIH complex DNA helicase subunit Rad15,P26659
+SPCC970.01,rad16,DNA repair endonuclease XPF,P36617
+SPAC14C4.13,rad17,RFC related checkpoint protein Rad17,P50531
+SPAC3G6.06c,rad2,FEN-1 endonuclease Rad2,P39750
+SPCC338.17c,rad21,"mitotic cohesin complex, non-SMC subunit Rad21 (kleisin)",P30776
+SPBC216.05,rad3,ATR checkpoint kinase Rad3,Q02099
+SPAC1556.01c,rad50,DNA repair protein Rad50,Q9UTJ8
+SPAC644.14c,rad51,RecA family recombinase Rad51/Rhp51,P36601
+SPAC30D11.10,rad52,"DNA recombination protein, Rad51 mediator Rad52 (previously Rad22)",P36592
+SPAC3C7.03c,rad55,RecA family ATPase Rad55/Rhp55,O14129
+SPAC20H4.07,rad57,RecA family ATPase Rad57/Rhp57,Q9UUL2
+SPBC1921.02,rad60,"DNA repair protein, SUMO-related Rad60",Q9USX3
+SPAC13G6.01c,rad8,ubiquitin-protein ligase E3 involved in DNA repair Rad8,P36607
+SPAC664.07c,rad9,checkpoint clamp complex protein Rad9,P26306
+SPAC22F3.03c,rdh54,ATP-dependent DNA helicase Rdh54,Q09772
+SPAC17H9.03c,rdl1,RAD51D-like protein 1,O13800
+SPBC1347.01c,rev1,deoxycytidyl transferase Rev1 (predicted),O94623
+SPAC688.10,rev3,DNA polymerase zeta catalytic subunit Rev3 (predicted),Q9P6L6
+SPBC12D12.09,rev7,DNA polymerase zeta Rev7 (predicted),Q0E7J8
+SPBC23E6.07c,rfc1,DNA replication factor C complex subunit Rfc1,O60182
+SPAC23D3.02,rfc2,DNA replication factor C complex subunit Rfc2,Q09843
+SPAC27E2.10c,rfc3,DNA replication factor C complex subunit Rfc3,O14003
+SPAC1687.03c,rfc4,DNA replication factor C complex subunit Rfc4,O94449
+SPBC83.14c,rfc5,DNA replication factor C complex subunit Rfc5,O94697
+SPAC19A8.10,rfp1,SUMO-targeted ubiquitin-protein ligase subunit Rfp1,O13826
+SPAC343.18,rfp2,SUMO-targeted ubiquitin-protein ligase subunit Rfp2,Q9UT72
+SPBC649.03,rhp14,XP-A family homolog Rhp14,O59753
+SPCC330.01c,rhp16,Rad16 homolog ATP-dependent DNA helicase/ ubiquitin protein ligase E3 Rhp16,P79051
+SPBC1734.06,rhp18,"Rad18 homolog ubiquitin protein ligase E3, Rhp18",O74747
+SPBC2D10.12,rhp23,Rad23 homolog Rhp23,O74803
+SPCP25A2.02c,rhp26,SNF2 family ATP-dependent DNA helicase Rhp26,Q9UR24
+SPAC12B10.12c,rhp41,DNA repair protein Rhp41,Q10445
+SPCC4G3.10c,rhp42,DNA repair protein Rhp42,P87235
+SPCC330.02,rhp7,Rad7 homolog Rhp7,O74999
+SPCC11E10.08,rik1,CLRC ubiquitin ligase complex WD repeat protein Rik1,Q10426
+SPBC1685.11,rlp1,RecA family ATPase Rlp1,O74331
+SPAC4G9.02,rnh201,ribonuclease H2 complex subunit Rnh201,Q10236
+SPAPYUG7.04c,rpb9,DNA-directed RNA polymerase II complex subunit Rpb9,O74635
+SPAC2G11.12,rqh1,RecQ type DNA helicase Rqh1,Q09811
+SPAC17A2.12,rrp1,ATP-dependent DNA helicase/ ubiquitin-protein ligase E3 (predicted),O13762
+SPBC23E6.02,rrp2,"ATP-dependent DNA helicase, ubiquitin-protein ligase E3 (predicted)",O60177
+SPBC119.14,rti1,Rad22 homolog Rti1,O42905
+SPBC28F2.07,sfr1,Swi five-dependent recombination mediator Sfr1,Q9USV1
+SPAP27G11.15,slx1,structure-specific endonuclease catalytic subunit Slx1,Q9P7M3
+SPAC688.06c,slx4,structure-specific endonuclease subunit Slx4,Q9P6M0
+SPCC5E4.06,smc6,Smc5-6 complex SMC P-loop ATPase subunit Smc6,P53692
+SPBC19G7.04,spr1,DNA-protein crosslink removal protease (predicted),O42953
+SPAC4H3.05,srs2,"ATP-dependent DNA helicase, UvrD subfamily",Q10213
+SPBC660.13c,ssb1,DNA replication factor A subunit Ssb1,Q92372
+SPCC1753.01c,ssb2,single-stranded DNA binding protein Ssb2,Q92373
+SPCC23B6.05c,ssb3,DNA replication factor A subunit Ssb3,Q92374
+SPCC1682.07,ssl1,transcription factor TFIIH complex subunit Ssl1,O74995
+SPAC9G1.13c,swc4,Swr1 complex subunit Swc4,O14308
+SPBC4F6.15c,swi10,DNA repair endonuclease non-catalytic subunit Swi10,Q06182
+SPBC409.03,swi5,Swi5 protein,Q9UUB7
+SPBC11B10.06,sws1,SWIM domain containing-Srs2 interacting protein 1,O13600
+SPAC16A10.07c,taz1,human TRF ortholog Taz1,P79005
+SPCP31B10.05,tdp1,tyrosyl-DNA phosphodiesterase Tdp1,Q9USG9
+SPCC23B6.03c,tel1,ATM checkpoint kinase,O74630
+SPAC16E8.11c,tfb1,transcription factor TFIIH complex subunit Tfb1 (predicted),O13745
+SPBC13G1.13,tfb2,transcription factor TFIIH complex subunit Tfb2,P87303
+SPBC30B4.07c,tfb4,transcription factor TFIIH complex subunit Tfb4,O74366
+SPBC32F12.15,tfb5,transcription factor TFIIH complex subunit Tfb5 (predicted),Q9HDW3
+SPCC965.05c,thp1,uracil DNA N-glycosylase Thp1,O59825
+SPBC16G5.12c,top3,DNA topoisomerase III,O60126
+SPAC1F5.11c,tra2,NuA4 complex phosphatidylinositol pseudokinase complex subunit Tra2,Q10064
+SPAC11E3.04c,ubc13,ubiquitin conjugating enzyme E2 Ubc13,O13685
+SPBC713.02c,ubp15,ubiquitin C-terminal hydrolase Ubp15,Q9UTT1
+SPCC1183.06,ung1,uracil DNA N-glycosylase Ung1,O74834
+SPBC19C7.09c,uve1,endonuclease Uve1,Q10988
+SPCC1795.08c,vid21,NuA4 histone acetyltransferase complex subunit Vid21,O59773
+SPAC12G12.10,wdr21,"WD repeat protein, human DDB1 and CUL4-associated factor 4 ortholog Wdr21",Q09873
+SPAC343.17c,wdr70,"DDB1-CUL4-associated factor (DCAF), Wdr70",Q9UT73
+SPAC521.02,wss1,WLM domain metallopeptidase implicated in DNA repair Wss1 (predicted),Q9P7B5
+SPCC24B10.14c,xlf1,"XRCC4-like nonhomologous end joining factor, Cernunnon Xlf1/Nej1",Q9P7J2
+SPAC6G9.16c,xrc4,XRCC4 nonhomologous end joining factor Xrc4,Q92361
+SPAC17G8.07,yaf9,YEATS family histone acetyltransferase subunit Yaf9,Q10319
+SPAC11H11.03c,,ATP-dependent polydeoxyribonucleotide 5'-hydroxyl-kinase activity implicated in DNA repair (predicted),Q9UTP4
+SPAC12G12.16c,,"Fen1 family nuclease, XP-G family (predicted)",Q09708
+SPAC144.05,,ATP-dependent DNA helicase/ ubiquitin-protein ligase E3 (predicted),Q9UTL9
+SPAC1F12.06c,,inosine-containing RNA endoribonuclease (predicted),Q10348
+SPBC582.10c,,ATP-dependent DNA helicase Rhp16b (predicted),Q10332
+SPAC17G8.03c,bur6,DNA polymerase epsilon interactor Dpb3-like,Q10315
+SPBC14C8.07c,cdc18,MCM loader,P41411
+SPBC1347.10,cdc23,MCM-associated protein Mcm10,O42709
+SPAC24H6.05,cdc25,M phase inducer tyrosine phosphatase Cdc25,P06652
+SPAC17D4.02,cdc45,DNA replication pre-initiation complex subunit Cdc45,O74113
+SPCC18B5.11c,cds1,replication checkpoint kinase Cds1,Q09170
+SPBC428.18,cdt1,replication licensing factor Cdt1,P40382
+SPAC17H9.19c,cdt2,WD repeat protein Cdt2,Q10990
+SPBC902.02c,ctf18,Ctf18 RFC-like complex subunit Ctf18,Q9USQ1
+SPAC17G6.12,cul1,cullin 1,O13790
+SPBC17D11.08,dca7,"WD repeat protein, DDB1 and CUL4-associated factor Dca7 (predicted)",O74763
+SPCC550.13,dfp1,Hsk1-Dfp1 kinase complex regulatory subunit Dfp1,O59836
+SPBP8B7.14c,dpb2,"DNA polymerase epsilon catalytic subunit B, Dpb2",O94263
+SPCC16C4.22,dpb3,DNA polymerase epsilon Dpb3,C6Y4D0
+SPBC3D6.09,dpb4,DNA polymerase epsilon subunit Dpb4,P87174
+SPAC6B12.11,drc1,replication preinitiation complex assembly protein,O14216
+SPBC776.12c,hsk1,Dbf4(Dfp1)-dependent protein kinase Hsk1,P50582
+SPBC365.09c,kin17,human KIN ortholog (predicted),Q9Y7X9
+SPBC146.09c,lsd1,histone demethylase SWIRM1,Q9Y802
+SPAC1687.04,mcb1,MCM binding protein homolog Mcb1,O94450
+SPAPB1E7.02c,mcl1,DNA polymerase alpha accessory factor Mcl1,Q9C107
+SPBC4.04c,mcm2,MCM complex subunit Mcm2,P40377
+SPCC1682.02c,mcm3,MCM complex subunit Mcm3,P30666
+SPCC16A11.17,mcm4,MCM complex subunit Mcm4/Cdc21,P29458
+SPAC1B2.05,mcm5,MCM complex subunit Mcm5,P41389
+SPBC25D12.03c,mcm7,MCM complex subunit Mcm7,O75001
+SPAC27D7.03c,mei2,RNA-binding protein involved in meiosis Mei2,P08965
+SPAC14C4.03,mek1,Cds1/Rad53/Chk2 family protein kinase Mek1,Q10292
+SPAC694.06c,mrc1,"claspin, Mrc1",Q9P7T4
+SPBC651.10,nse5,Smc5-6 complex non-SMC subunit Nse5,O94668
+SPAC11E3.08c,nse6,Smc5-6 complex non-SMC subunit Nse6,O13688
+SPBC29A10.15,orc1,origin recognition complex subunit Orc1,P54789
+SPBC685.09,orc2,origin recognition complex subunit Orc2,Q09142
+SPAC3H1.01c,orc3,origin recognition complex subunit Orp3,Q10067
+SPBP23A10.13,orc4,origin recognition complex subunit Orc4,Q9Y794
+SPBC646.14c,orc5,origin recognition complex subunit Orc5,O43114
+SPBC2A9.12,orc6,origin recognition complex subunit Orc6,O74796
+SPBC29A10.03c,pcf1,CAF assembly factor (CAF-1) complex large subunit Pcf1,Q1MTN9
+SPAC26H5.03,pcf2,"CAF assembly factor (CAF-1) complex subunit B, Pcf2",O13985
+SPAC25H1.06,pcf3,"CAF assembly factor (CAF-1) complex subunit C, Pcf3",Q9Y825
+SPCC338.16,pof3,F-box protein Pof3,O74991
+SPCC24B10.22,pog1,mitochondrial DNA polymerase gamma Pog1,Q12704
+SPAC4D7.03,pop2,F-box/WD repeat protein Pop2,O14170
+SPBP23A10.09,psf1,GINS complex subunit Psf1,Q9P7X6
+SPBC725.13c,psf2,GINS complex subunit Psf2,O94329
+SPAC227.16c,psf3,GINS complex subunit Psf3,Q9UTC3
+SPAC23C4.18c,rad4,BRCT domain protein Rad4,P32372
+SPBC1198.11c,reb1,RNA polymerase I transcription termination factor/ RNA polymerase II transcription factor Reb1,Q9P6H9
+SPBC16E9.17c,rem1,meiosis-specific cyclin Rem1,O14332
+SPBC2D10.06,rep1,MBF transcription factor activator Rep1,P40379
+SPAC6F6.17,rif1,telomere length regulator protein Rif1,Q96UP3
+SPAC2F3.04c,rim1,mitochondrial single-stranded DNA binding protein Rim1,O14087
+SPBC336.06c,rnh1,ribonuclease H Rnh1 (predicted),Q9UST8
+SPAC22F8.07c,rtf1,replication termination factor Rtf1,Q9UUI6
+SPAC1D4.09c,rtf2,replication termination factor Rtf2,Q10154
+SPCC1672.02c,sap1,switch-activating protein Sap1,P40847
+SPAC24H6.06,sld3,DNA replication pre-initiation complex subunit Sld3,Q09761
+SPBP4H10.21c,sld5,GINS complex subunit Sld5,Q9P7C8
+SPCC553.09c,spb70,DNA polymerase alpha B-subunit,O74946
+SPAC6B12.10c,spp1,DNA primase catalytic subunit Spp1,O14215
+SPBC17D11.06,spp2,DNA primase large subunit Spp2,O74761
+SPBC216.06c,swi1,replication fork protection complex subunit Swi1,Q9UUM2
+SPBC30D10.04,swi3,replication fork protection complex subunit Swi3,O14350
+SPAC6F6.16c,tpz1,Tppl homolog Tpz1,O14246
+SPAC12B10.15c,,ribonuclease H2 complex subunit (predicted),Q10448
+SPBC1347.08c,,ribonuclease H2 complex subunit (predicted),O94627
+SPCC737.07c,,DNA polymerase alpha-associated DNA helicase A (predicted),O94247
+SPCC24B10.08c,ada2,SAGA complex subunit Ada2,Q9P7J7
+SPBC29B5.01,atf1,"transcription factor, Atf-CREB family Atf1",P52890
+SPCC188.07,ccq1,telomere maintenance protein Ccq1,Q10432
+SPBC2D10.13,est1,telomerase regulator Est1,O74804
+SPAC1952.05,gcn5,SAGA complex histone acetyltransferase catalytic subunit Gcn5,Q9UUK2
+SPBC1718.02,hop1,linear element associated protein Hop1,Q9P7P2
+SPAC13A11.03,mcp7,meiosis specific coiled-coil protein Mcp7,Q09739
+SPBC31F10.08,mde2,Mde2 protein,P87309
+SPBC32H8.11,mei4,meiotic forkhead transcription factor Mei4,O13606
+SPAC222.15,meu13,Tat binding protein 1(TBP-1)-interacting protein (TBPIP) homolog (predicted),Q9HGK2
+SPAC21E11.03c,pcr1,transcription factor Pcr1,Q09926
+SPAC19G12.13c,poz1,Pot1 associated protein Poz1,O13852
+SPAC15A10.03c,rad54,DNA-dependent ATPase Rad54/Rhp54,P41410
+SPBC1778.02,rap1,telomere binding protein Rap1,Q96TL7
+SPAC25G10.04c,rec10,meiotic recombination protein Rec10,Q09823
+SPAC17A5.11,rec12,meiotic recombination endonuclease Rec12,P40384
+SPBC1711.14,rec15,meiotic recombination protein Rec15,Q09094
+SPAC1952.15c,rec24,meiotic recombination protein Rec24,Q9UUJ4
+SPAC17A5.18c,rec25,meiotic recombination protein Rec25,Q9C115
+SPBC577.05c,rec27,meiotic recombination protein Rec27,Q9USR4
+SPBC21B10.12,rec6,meiotic recombination protein Rec6,P40385
+SPCC1753.03c,rec7,meiotic recombination protein Rec7,P36625
+SPBC409.16c,saw1,recombination protein Saw1 (predicted),Q9UUA8
+SPBC409.05,skp1,SCF ubiquitin ligase complex subunit Skp1,Q9Y709
+SPBC3D6.11c,slx8,SUMO-targeted ubiquitin-protein ligase E3 Slx8,P87176
+SPAC14C4.02c,smc5,Smc5-6 complex SMC P-loop ATPase subunit Smc5,O13710
+SPAC24B11.06c,sty1,MAP kinase Sty1,Q09892
+SPAC1142.03c,swi2,Swi5 complex subunit Swi2,Q10668
+SPAC664.01c,swi6,HP1 family chromodomain protein Swi6,P40381
+SPAC9.04,Tf2-1,retrotransposable element/transposon Tf2-type,P0CT34
+SPBC1289.17,Tf2-11,retrotransposable element/transposon Tf2-type,Q9UR07
+SPCC1020.14,Tf2-12,retrotransposable element/transposon Tf2-type,P0CT41
+SPAC167.08,Tf2-2,retrotransposable element/transposon Tf2-type,P0CT35
+SPAC2E1P3.03c,Tf2-3,retrotransposable element/transposon Tf2-type,P0CT36
+SPAC26A3.13c,Tf2-4,retrotransposable element/transposon Tf2-type,P0CT37
+SPAPB15E9.03c,Tf2-5,retrotransposable element/transposon Tf2-type,P0CT38
+SPAC27E2.08,Tf2-6,retrotransposable element/transposon Tf2-type,P0CT39
+SPAC13D1.01c,Tf2-7,retrotransposable element/transposon Tf2-type,P0CT42
+SPAC19D5.09c,Tf2-8,retrotransposable element/transposon Tf2-type,P0CT43
+SPBC9B6.02c,Tf2-9,retrotransposable element/transposon Tf2-type,P0CT40
+SPAC212.11,tlh1,RecQ type DNA helicase,P0CT33
+SPBCPT2R1.08c,tlh2,RecQ type DNA helicase Tlh1,Q1RKN3
+SPBC1A4.03c,top2,DNA topoisomerase II,P08096
