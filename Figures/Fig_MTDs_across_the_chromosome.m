@@ -26,8 +26,12 @@ R = grpstats(T,{'chr' 'locR'},'mean');
 R.obs_over_mhr = R.mean_sumObs ./ R.mean_sumMHR ; 
 R = sortrows( R , 'obs_over_mhr' ,'ascend') ;
 
-%% plot MTDs across chromosome I
 clrs = cbrewer('qual','Set1',5);
+
+
+FLAG__UseSameYlim_For_HotColdSpot_MHPs = 1 ; 
+
+%% plot MTDs across chromosome I
 fh = figure('units','centimeters','position',[5 5  30 8]) ;
 t = tiledlayout(3,1,'TileSpacing','none','Padding','none') ; 
 nexttile
@@ -70,6 +74,8 @@ Q = T(T.loc > hot_window(1) & T.loc < hot_window(2)  ,:);
 R(R.obs_over_mhr>prctile(R.obs_over_mhr,95) &  R.mean_sumObs>prctile(R.mean_sumObs,95)  ,:)
 Q = T(T.locR == 4000,:);
 
+hot_counts = [sum(Q.sumObs) sum(Q.sumMHR)] ; 
+
 xt = 0:20:1e5 ; 
 
 fh = figure('units','centimeters','position',[5 5  12 10]) ;
@@ -79,6 +85,10 @@ plot( Q.loc , Q.sumMHR ,'Color',clrs(1,:) )
 ylabel('# of MHPs')
 axis tight; 
 set(gca,'xtick',xt);
+if(FLAG__UseSameYlim_For_HotColdSpot_MHPs)
+    ylim([1500 3600])
+end
+    
 %rectangle('Position',[gene_window(1) , min(ylim) , diff(gene_window) , max(ylim)])
 
 nexttile
@@ -107,11 +117,14 @@ print('-dpng',[FIGBASENAME 'H'],'-r300');
 close ; 
 
 
-%% Find cold spot
+% Find cold spot
 R(R.obs_over_mhr<prctile(R.obs_over_mhr,10) &  R.mean_sumObs<prctile(R.mean_sumObs,5)  ,:)
 
 
 Q = T(T.locR ==  1300 ,:);
+
+cold_counts = [sum(Q.sumObs) sum(Q.sumMHR)] ; 
+
 xt = 0:20:1e5 ; 
 
 fh = figure('units','centimeters','position',[5 5  12 10]) ;
@@ -121,6 +134,9 @@ plot( Q.loc , Q.sumMHR ,'Color',clrs(1,:) )
 ylabel('# of MHPs')
 axis tight; 
 set(gca,'xtick',xt);
+if(FLAG__UseSameYlim_For_HotColdSpot_MHPs)
+    ylim([1500 3600])
+end
 %rectangle('Position',[gene_window(1) , min(ylim) , diff(gene_window) , max(ylim)])
 
 nexttile
@@ -147,3 +163,7 @@ xlabel(t,'Position on chromosome (kb)','FontSize',15)
 title(t,'cold spot in chrI')
 print('-dpng',[FIGBASENAME 'C'],'-r300');
 close ; 
+
+
+counts_x = vertcat(hot_counts , cold_counts)
+[~,p,fishstat]  = fishertest(counts_x)
