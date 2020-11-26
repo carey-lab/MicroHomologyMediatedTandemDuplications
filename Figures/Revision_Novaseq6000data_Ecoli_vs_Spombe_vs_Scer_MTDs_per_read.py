@@ -13,6 +13,7 @@ import os, glob, re
 PROJDIR = '/Volumes/CareyLab/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/'
 DATADIR = PROJDIR + '/DataFromCluster/'
 
+figname = '/Users/lcarey/Downloads/Revision__ComparSpeices__Boxplots__MTD_sites_per_million_reads.png'
 
 # %% load metadata (species, lane, library #) by parsing filenames
 df = pd.DataFrame()
@@ -73,7 +74,7 @@ yt = [0.5,1,5,10,50]
 ax.set_yticks(yt)
 ax.set_yticklabels(yt)
 ax.grid()
-plt.savefig('Revision__ComparSpeices__Boxplots__MTD_sites_per_million_reads.png',dpi=600)
+plt.savefig(fig_name,dpi=600)
 
 print( df.groupby('species')['MTD_freq'].median() )
 # %%
