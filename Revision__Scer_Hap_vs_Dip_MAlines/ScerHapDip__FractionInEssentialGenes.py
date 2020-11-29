@@ -19,7 +19,7 @@ df['MHlen'] = df.MHPleftend - df.MHPleftStart
 df['Essential'] = df.type.str.match('Essential')
 df['Non_essen'] = df.type.str.match('Non-essent')
 df['Intergenic'] = df.type.str.match('intergenic')
-df['SizeDivByThree'] = (df.MHPright-df.MHPleftStart)%3==0 ; 
+df['SizeDivByThree'] = (df.MHPright-df.MHPleftStart)%3==0
 df.drop(columns='chr2',inplace=True)
 df = df[df.chr!='Mito']
 
@@ -65,6 +65,56 @@ dip.reset_index(drop=False,inplace=True)
 print(len(dip))
 print(len(hap))
 
+#%% function to return dict of useful values for bootstrapping
+def useful_values(df,id):
+        d = {'ID':id,
+        'NumEssential':np.sum(df.Essential),
+        'PctEssential':np.mean(df.Essential)*100,
+        'NumNonEssential':np.sum(df.Non_essen),
+        'PctNonEssential':np.mean(df.Non_essen)*100,
+        'NumIntergenic':np.sum(df.Intergenic),
+        'PctIntergenic':np.mean(df.Intergenic)*100,
+        'Total':len(df),
+        'Div3_pct_Essential':np.mean(df['SizeDivByThree'][df.Essential])*100,
+        'Div3_pct_NonEssential':np.mean(df['SizeDivByThree'][df.Non_essen])*100,
+        'Div3_pct_Intergenic':np.mean(df['SizeDivByThree'][df.Intergenic])*100,
+        'Div3_pct_All':np.mean(df['SizeDivByThree'])*100,
+        }
+        return d
+# %% Bootstrap
+BS = pd.DataFrame()
+for I in range(0,10000,2):
+        BS = BS.append(
+                pd.DataFrame(useful_values(dip.sample(frac=1,replace=True),'dip'),index=[I])
+        )
+        BS = BS.append(
+                pd.DataFrame(useful_values(hap.sample(frac=1,replace=True),'hap'),index=[I+1])
+        )
+
+#%% plot based on bootstrap
+g = BS.groupby('ID').agg(['mean','std'])
+fig,ax = plt.subplots(2,3)
+fig.set_figwidth(12)
+ax[0,0].bar([1,2],g.PctEssential['mean'],yerr=g.PctEssential['std'])
+ax[0,0].set_ylabel(r'% Essential')
+ax[0,1].bar([1,2],g.PctNonEssential['mean'],yerr=g.PctNonEssential['std'])
+ax[0,1].set_ylabel(r'% Non essential')
+ax[0,2].bar([1,2],g.PctIntergenic['mean'],yerr=g.PctIntergenic['std'])
+ax[0,2].set_ylabel(r'% Intergenic')
+ax[1,0].bar([1,2],g.Div3_pct_Essential['mean'],yerr=g.Div3_pct_Essential['std'])
+ax[1,0].set_ylabel(r'% /3 Essen')
+ax[1,1].bar([1,2],g.Div3_pct_NonEssential['mean'],yerr=g.Div3_pct_NonEssential['std'])
+ax[1,1].set_ylabel(r'% /3 Non ess')
+ax[1,2].bar([1,2],g.Div3_pct_Intergenic['mean'],yerr=g.Div3_pct_Intergenic['std'])
+ax[1,2].set_ylabel(r'% /3 Intergen')
+
+for I in range(3):
+        ax[1,I].set_yticks([0,33,66,1])
+
+for I in range(3):
+        for J in range(2):
+                ax[J,I].set_xticks([1,2])
+                ax[J,I].set_xticklabels(list(g.index.values))
 # %%
 print('')
 print(f"# Essential & diploid = {np.sum(dip.Essential)}")
