@@ -3,6 +3,7 @@ DATADIR = '~/CareyLab/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_Zhej
 FIGUREDIR = '~/CareyLab/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/FIGURES/' ; 
 
 T = readtable([ DATADIR 'Scer_HapVSDip__dup_sites_found____genes_with_essentiality.txt' ], 'ReadVariableNames' ,false,'Delimiter','\t');
+% Var10 is SRA  ;   Var11 is Nreads
 %T = readtable([ DATADIR 'Scer_HapVSDip__dup_sites_found____genes_with_essentiality_overlap=1.0.txt' ], 'ReadVariableNames' ,false,'Delimiter','\t');
 A = readtable([ DATADIR 'Scer_HapVSDip__MetaData_Ploidy_and_MAlines.csv' ]);
 
