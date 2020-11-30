@@ -13,7 +13,7 @@ import os, glob, re
 PROJDIR = '/Volumes/CareyLab/Projects/2019__MicroHomologyMediatedIndels__XiangweHe_ZhejiangU/'
 DATADIR = PROJDIR + '/DataFromCluster/'
 
-figname = '/Users/lcarey/Downloads/Revision__ComparSpeices__Boxplots__MTD_sites_per_million_reads.png'
+fig_name = '/Users/lcarey/Downloads/Revision__ComparSpeices__Boxplots__MTD_sites_per_million_reads.png'
 
 # %% load metadata (species, lane, library #) by parsing filenames
 df = pd.DataFrame()
