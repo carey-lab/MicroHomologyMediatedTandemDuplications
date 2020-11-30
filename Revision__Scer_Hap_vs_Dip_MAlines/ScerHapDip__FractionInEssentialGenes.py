@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 import scipy.stats as stats 
 import os
 
-
-DATADIR = os.path.dirname(__file__) # folder with this script; also contains the data files
+try:
+        DATADIR = os.path.dirname(__file__) # folder with this script; also contains the data files
+except:
+        DATADIR = os.getenv('HOME') + '/Develop/MicroHomologyMediatedTandemDuplications/Revision__Scer_Hap_vs_Dip_MAlines/'
 image_file_basename = DATADIR + '/Scer_HapVSDip__MetaData_Ploidy_and_MAlines___'
 data_file_name = DATADIR+'/Scer_HapVSDip__dup_sites_found____genes_with_essentiality.txt.xz'
 anno_file_name = DATADIR+'/Scer_HapVSDip__MetaData_Ploidy_and_MAlines.csv.xz'
@@ -20,6 +22,7 @@ df['Essential'] = df.type.str.match('Essential')
 df['Non_essen'] = df.type.str.match('Non-essent')
 df['Intergenic'] = df.type.str.match('intergenic')
 df['SizeDivByThree'] = (df.MHPright-df.MHPleftStart)%3==0
+df['DuplicationLength'] = (df.MHPright-df.MHPleftStart)
 df.drop(columns='chr2',inplace=True)
 df = df[df.chr!='Mito']
 
@@ -50,7 +53,7 @@ df.head()
 #           993
 #
 cols_to_use = ['ORFstart','ORFnd','type','orf','gene','Essential','Non_essen','Intergenic']
-cols_to_use += ['chr','MHPleftStart','MHPright','MHPleftend','MHlen','SizeDivByThree']
+cols_to_use += ['chr','MHPleftStart','MHPright','MHPleftend','MHlen','SizeDivByThree','DuplicationLength']
 
 hap = df[df.Ploidy == 'hap']
 hap = hap.groupby(cols_to_use).agg('count')
@@ -83,38 +86,44 @@ def useful_values(df,id):
         return d
 # %% Bootstrap
 BS = pd.DataFrame()
-for I in range(0,10000,2):
+for I in range(0,1000,2):
         BS = BS.append(
-                pd.DataFrame(useful_values(dip.sample(frac=1,replace=True),'dip'),index=[I])
+                pd.DataFrame(useful_values(dip.sample(frac=1,replace=True),'Diploid'),index=[I])
         )
         BS = BS.append(
-                pd.DataFrame(useful_values(hap.sample(frac=1,replace=True),'hap'),index=[I+1])
+                pd.DataFrame(useful_values(hap.sample(frac=1,replace=True),'Haploid'),index=[I+1])
         )
 
 #%% plot based on bootstrap
+clrs = ('lightgrey','dimgrey')
 g = BS.groupby('ID').agg(['mean','std'])
 fig,ax = plt.subplots(2,3)
 fig.set_figwidth(12)
-ax[0,0].bar([1,2],g.PctEssential['mean'],yerr=g.PctEssential['std'])
-ax[0,0].set_ylabel(r'% Essential')
-ax[0,1].bar([1,2],g.PctNonEssential['mean'],yerr=g.PctNonEssential['std'])
-ax[0,1].set_ylabel(r'% Non essential')
-ax[0,2].bar([1,2],g.PctIntergenic['mean'],yerr=g.PctIntergenic['std'])
-ax[0,2].set_ylabel(r'% Intergenic')
-ax[1,0].bar([1,2],g.Div3_pct_Essential['mean'],yerr=g.Div3_pct_Essential['std'])
-ax[1,0].set_ylabel(r'% /3 Essen')
-ax[1,1].bar([1,2],g.Div3_pct_NonEssential['mean'],yerr=g.Div3_pct_NonEssential['std'])
-ax[1,1].set_ylabel(r'% /3 Non ess')
-ax[1,2].bar([1,2],g.Div3_pct_Intergenic['mean'],yerr=g.Div3_pct_Intergenic['std'])
-ax[1,2].set_ylabel(r'% /3 Intergen')
+ax[0,0].bar([1,2],g.PctEssential['mean'],yerr=g.PctEssential['std'],color=clrs)
+ax[0,0].set_ylabel(r'% of MTDs in')
+ax[0,0].set_title('Essential genes')
+ax[0,1].bar([1,2],g.PctNonEssential['mean'],yerr=g.PctNonEssential['std'],color=clrs)
+ax[0,1].set_title('Non-essential genes')
+ax[0,2].bar([1,2],g.PctIntergenic['mean'],yerr=g.PctIntergenic['std'],color=clrs)
+ax[0,2].set_title('Intergenic regions')
+ax[1,0].bar([1,2],g.Div3_pct_Essential['mean'],yerr=g.Div3_pct_Essential['std'],color=clrs)
+ax[1,0].set_ylabel(r'% in-frame')
+ax[1,1].bar([1,2],g.Div3_pct_NonEssential['mean'],yerr=g.Div3_pct_NonEssential['std'],color=clrs)
+#ax[1,1].set_ylabel(r'% in-frame')
+ax[1,2].bar([1,2],g.Div3_pct_Intergenic['mean'],yerr=g.Div3_pct_Intergenic['std'],color=clrs)
+#ax[1,2].set_ylabel(r'% in-frame')
 
 for I in range(3):
-        ax[1,I].set_yticks([0,33,66,1])
+        ax[1,I].set_yticks([0,33,66,100])
+        ax[1,I].axhline(y=33,linestyle=':',color='red')
+        ax[1,I].set_ylim(0,100)
 
 for I in range(3):
         for J in range(2):
                 ax[J,I].set_xticks([1,2])
                 ax[J,I].set_xticklabels(list(g.index.values))
+
+plt.savefig(image_file_basename + 'bar_plots_bootstrap_errorbars.png',dpi=600)
 # %%
 print('')
 print(f"# Essential & diploid = {np.sum(dip.Essential)}")
