@@ -1,3 +1,10 @@
+# image files
+.png
+.jpeg
+.pdf
+.svg
+.eps
+
 # History files
 .Rhistory
 .Rapp.history
