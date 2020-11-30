@@ -85,6 +85,9 @@ def useful_values(df,id):
         'NumIntergenic':np.sum(df.Intergenic),
         'PctIntergenic':np.mean(df.Intergenic)*100,
         'PctDeleterious':np.sum(df.fitness<0.9) / np.sum(df.fitness>=0)*100,
+        'PctWithFitness':np.mean(df.fitness>=0)*100,
+        'PctHighFitness90':np.sum(df.fitness>0.9) / np.sum(df.fitness>=0)*100,
+        'PctHighFitness95':np.sum(df.fitness>0.95) / np.sum(df.fitness>=0)*100,
         'Total':len(df),
         'Div3_pct_Essential':np.mean(df['SizeDivByThree'][df.Essential])*100,
         'Div3_pct_NonEssential':np.mean(df['SizeDivByThree'][df.Non_essen])*100,
@@ -92,6 +95,9 @@ def useful_values(df,id):
         'Div3_pct_All':np.mean(df['SizeDivByThree'])*100,
         'Div3_pct_Unfit':np.mean(df['SizeDivByThree'][
                 np.logical_and(df.fitness>0,df.fitness<0.9)])*100,
+        'Div3_pct_AnyFit':np.mean(df['SizeDivByThree'][df.fitness>=0])*100,
+        'Div3_pct_HighFit90':np.mean(df['SizeDivByThree'][df.fitness>0.90])*100,
+        'Div3_pct_HighFit95':np.mean(df['SizeDivByThree'][df.fitness>0.95])*100,                
         }
         return d
 # %% Bootstrap
@@ -142,49 +148,11 @@ for I in range(4):
                         pass
 
 plt.savefig(image_file_basename + 'bar_plots_bootstrap_errorbars.png',dpi=600)
-# %%
-print('')
-print(f"# Essential & diploid = {np.sum(dip.Essential)}")
-print(f"# Essential & haploid = {np.sum(hap.Essential)}")
-print('')
-print(f"# Non-Essential & diploid = {np.sum(dip.Non_essen)}")
-print(f"# Non-Essential  & haploid = {np.sum(hap.Non_essen)}")
-print('')
-print(f"# intergenic & diploid = {np.sum(dip.Intergenic)}")
-print(f"# intergenic & haploid = {np.sum(hap.Intergenic)}")
-print('')
-print(f"total # dip = {len(dip)}")
-print(f"total # hap = {len(hap)}")
-print('')
 
-
-print(f"Dip mean Div3 Essential = {np.mean(dip['SizeDivByThree'][dip.Essential])}")
-print(f"Hap mean Div3 Essential = {np.mean(hap['SizeDivByThree'][hap.Essential])}")
-print(f"Dip mean Div3 Non-Essen = {np.mean(hap['SizeDivByThree'][dip.Non_essen])}")
-print(f"Hap mean Div3 Non-Essen = {np.mean(hap['SizeDivByThree'][hap.Non_essen])}")
-print(f"Dip mean Div3 Intergenic = {np.mean(hap['SizeDivByThree'][dip.Intergenic])}")
-print(f"Hap mean Div3 Intergenic = {np.mean(hap['SizeDivByThree'][hap.Intergenic])}")
-
-
-def func(pct, allvals):
-    absolute = int(pct/100.*np.sum(allvals))
-    return "{:d}".format(absolute)
-    #return "{:.1f}%\n({:d})".format(pct, absolute)
-
-fig, ax = plt.subplots(1,2)
-labels = ['Essential', 'Non-essen', 'Intergenic', 'Deleterious']
-sizesDip = [14,32,65]
-sizesHap = [1,10,25]
-explode = (0.1,0,0)  # only "explode" the 2nd slice (i.e. 'Hogs')
-# autopct='%1.1f%%'
-ax[0].pie(sizesDip, explode=explode, labels=labels, autopct=lambda pct: func(pct, sizesDip),
-        shadow=True, startangle=90)
-ax[0].set_title('Diploid')
-
-ax[1].pie(sizesHap, explode=explode, labels=labels, autopct=lambda pct: func(pct, sizesHap),
-        shadow=True, startangle=90)
-ax[1].set_title('Haploid')
-                
+#%% chose an example de-novo MT0D
+q = df.groupby(cols_to_use)['Nreads'].agg(['sum','count']).sort_values('sum',ascending=False)
+q = q[q['count']<10]
+print(q.head())
 # %%
 x = [[sizesDip[0], sizesHap[0]],[sum(sizesDip[-2:]),sum(sizesHap[-2:])] ]
 oddsratio, pvalue = stats.fisher_exact(x)
