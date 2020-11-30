@@ -35,6 +35,12 @@ df = df[df.Nreads>0]
 df.reset_index(inplace=True,drop=True)
 ## ### ### #### ### ### ### ### 
 
+# have to do this twice because some MTDs get assigned to multiple features
+NsrasEachMTD = df.groupby(['MHPleftStart','MHPleftend','MHPright','SRA'])['chr'].agg('count').sort_values(ascending=False)
+NsrasEachMTD = NsrasEachMTD.groupby(['MHPleftStart','MHPleftend','MHPright']).agg('count').sort_values(ascending=False)
+
+NsrasEachMTD_nr5 = df[df.Nreads>=5].groupby(['MHPleftStart','MHPleftend','MHPright','SRA'])['chr'].agg('count').sort_values(ascending=False)
+NsrasEachMTD_nr5 = NsrasEachMTD_nr5.groupby(['MHPleftStart','MHPleftend','MHPright']).agg('count').sort_values(ascending=False)
 
 A = pd.read_csv(anno_file_name)
 A = A[['SRA','Ploidy']]
@@ -157,4 +163,13 @@ print(q.head())
 x = [[sizesDip[0], sizesHap[0]],[sum(sizesDip[-2:]),sum(sizesHap[-2:])] ]
 oddsratio, pvalue = stats.fisher_exact(x)
 print(f"FE test: OR={oddsratio}\tp={pvalue:0.05f}")
+# %% How man
+fig,ax=plt.subplots(1,2,sharey=True,sharex=True)
+fig.set_size_inches(10,3)
+ax[0].hist(NsrasEachMTD,bins=range(NsrasEachMTD.max()),log=True)
+ax[0].set_xlabel('# of MA lines with this MTD')
+ax[0].set_ylabel('# of MTDs')
+ax[1].hist(NsrasEachMTD_nr5,bins=range(NsrasEachMTD.max()),log=True)
+ax[1].set_ylabel('# of MTDs (reads >= 5)')
+
 # %%
