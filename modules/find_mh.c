@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <ctype.h>
+#include <string.h>
 
 //// 开始定义常数
 #define SK       4
@@ -290,7 +291,9 @@ int main(int argc, char * argv[]) {
                         // printf("%s\n", sname); // debug
                         expand_PairsTab(pt);        // 用 Priori 法扩张 PairsTab
                         print_PairsTab(pt, fout , sname);   // 输出 PairsTab
-                        fclose(fout);
+                        if(strcmp(argv[1],"STDOUT")!=0){
+				fclose(fout);
+			}
                         free_KHash(h);              // 释放 k-mer 哈希表
                         free_PairsTab(pt);          // 释放 PairsTab
                     }
@@ -306,7 +309,11 @@ int main(int argc, char * argv[]) {
                             i++;
                         }                           // 在第一个分隔符的位置截断序列名称
                         sprintf(fnout, "%s.%05d.%s.out", argv[1], ns, sname);
-                        fout = fopen(fnout, "w");   // 打开输出文件
+			if (strcmp(argv[1],"STDOUT")==0){
+				fout = stdout;
+			}else{
+                        	fout = fopen(fnout, "w");   // 打开输出文件
+			}
                         pos = 1-SK;                 // 初始化 pos 为
                                                     // 这样当读完第一个 kmer 时 pos 为 1
                         skip = 1-SK;
