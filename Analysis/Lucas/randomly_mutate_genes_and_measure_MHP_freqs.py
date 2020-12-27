@@ -12,11 +12,14 @@ from scipy.stats import gaussian_kde
 from pprint import pprint
 
 sys.argv = [''] #if running in interactive window
+os.chdir("/Users/lcarey/Downloads/Revision_Ura4_MHP_Frequency")
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--number_of_shuffled_versions',default=20,type=int)
 parser.add_argument('--cds_fasta_filename',default='cds.fasta.gz',type=str)
 parser.add_argument('--min_gene_length',default=100,type=int)
 parser.add_argument('--MAX_MHPLEN',default=7,type=int)
+parser.add_argument('--n_genes',default=100000,type=int,help='for debugging -- run for first N genes')
 
 opts = parser.parse_args()
 
@@ -76,16 +79,30 @@ class CodonShuffler:
         shuffled_seq += seq[end:]
         return shuffled_seq
 
+#%% count_MHPs()
+
+def count_MHPs(input_seq):
+    p = run(['find_mh','STDOUT'], stdout=PIPE,input=input_seq, encoding='ascii')
+    df = pd.read_csv(StringIO(p.stdout),sep='\t',names=['s','e','MHPlen','gene'])
+    df.MHPlen[df.MHPlen>opts.MAX_MHPLEN] = opts.MAX_MHPLEN
+    df['MTD_KeepsFrame'] = (df.e - df.s)%3 == 0
+    q0 = df.groupby(['MHPlen','MTD_KeepsFrame'])['gene'].count().rename('# of MHPs')
+    q1 = df.groupby('MHPlen')['gene'].count().rename('# of MHPs')
+    q1.index = pd.MultiIndex.from_product([q1.index,['any']],names=q0.index.names)
+    return q1.append(q0).sort_index()
+
+
 # %% shuffle all genes
 shuffler = CodonShuffler()
 c=0
 l = pd.DataFrame()
 results_df = pd.DataFrame()
+
 with gzip.open(opts.cds_fasta_filename,'rt') as fasta_fh:
     for gene in SeqIO.parse(fasta_fh,'fasta'):
-        c+=1
-        if gene.seq.startswith('ATG') and gene.seq.translate().endswith('*') \
+        if gene.seq.startswith('ATG') and gene.seq.translate().endswith('*') and c < opts.n_genes\
             and (gene.seq.translate().count('*')==1) and (len(gene.seq)>opts.min_gene_length):
+            c+=1
             d = dict()
             d['GC'] = GC(gene.seq)
             d['ID'] = gene.id
@@ -93,26 +110,17 @@ with gzip.open(opts.cds_fasta_filename,'rt') as fasta_fh:
             #and (not gene.id in EssentialGenes):
             #print(f"HD={hamming(str(shuffled_seq),str(gene.seq))}")
             #print(f"CAI orig={cai.cai_for_gene(str(gene.seq)):0.3f}\tnew={cai.cai_for_gene(str(shuffled_seq)):0.3f}")
-            input_seq_orig = f">{gene.id}\n{gene.seq}"
-            p = run(['find_mh','STDOUT'], stdout=PIPE,input=input_seq_orig, encoding='ascii')
-            df = pd.read_csv(StringIO(p.stdout),sep='\t',names=['s','e','MHPlen','gene'])
-            df.MHPlen[df.MHPlen>opts.MAX_MHPLEN] = opts.MAX_MHPLEN
-            d['N_MHPs_Orig'] = df.groupby('MHPlen')['gene'].count().rename('# of MHPs')
-
+            d['N_MHPs_Orig'] = count_MHPs(f">{gene.id}\n{gene.seq}")
             t = pd.DataFrame()
             for i in range(opts.number_of_shuffled_versions):
                 shuffled_seq = shuffler.shuffle_codons(gene.seq)
-                input_seq_recoded = f">{gene.id + '_shuffled'}\n{shuffled_seq}"
-                p = run(['find_mh','STDOUT'], stdout=PIPE,input=input_seq_recoded, encoding='ascii')
-                df = pd.read_csv(StringIO(p.stdout),sep='\t',names=['s','e','MHPlen','gene'])
-                df.MHPlen[df.MHPlen>opts.MAX_MHPLEN] = opts.MAX_MHPLEN
-                n_mhps = df.groupby('MHPlen')['gene'].count().rename('# of MHPs') 
-                t = t.append(pd.DataFrame(n_mhps))
-            t = t.reset_index().groupby('MHPlen').mean()
+                q = count_MHPs(f">{gene.id + '_shuffled'}\n{shuffled_seq}")
+                t = t.append(pd.DataFrame(q))
+            t = t.reset_index().groupby(['MHPlen','MTD_KeepsFrame']).mean()
             d['N_MHPs_Shuff'] = t.squeeze()
             results_df = results_df.append(d,ignore_index=True)
-            if c&100==0: print('.',end='')
-            if c&1000==0: print(' ')
+            if c%100==0: print(f"{c}",end=' ')
+            if c%1000==0: print(' ')
 
             # create ratio series with genes as index; can be unstacked into df
             r = (d['N_MHPs_Orig'] / d['N_MHPs_Shuff'])
@@ -120,15 +128,31 @@ with gzip.open(opts.cds_fasta_filename,'rt') as fasta_fh:
             l = l.append(pd.DataFrame(r))
 
 results_df = l.unstack()
-results_df['median'] = results_df.median(axis=1)
-results_df['mean'] = results_df.mean(axis=1)
-results_df.sort_values('median',inplace=True,ascending=False)
+keeps_frame_column_idx = [j for i,j in [y for x,y in results_df.columns]]
+mean_ratio_keeps_frame = results_df.loc[:,[x == True for x in keeps_frame_column_idx]].mean(axis=1)
+mean_ratio_does_not_keep_frame = results_df.loc[:,[x == False for x in keeps_frame_column_idx]].mean(axis=1)
+mean_ratio_any = results_df.loc[:,[x == 'any' for x in keeps_frame_column_idx]].mean(axis=1)
+results_df['mean_ratio_keeps_frame'] = mean_ratio_keeps_frame
+results_df['mean_ratio_does_not_keep_frame'] = mean_ratio_does_not_keep_frame
+results_df['mean_ratio_any'] = mean_ratio_any
+
 
 
 #%% join with metadata
 meta = pd.read_csv('Spombe_gene_names_map.tsv.xz',sep='\t',index_col='Systematic ID')
 q = results_df.merge(meta,how='left',left_index=True,right_index=True)
-q.to_csv('MHP_enrichment.tsv',sep='\t')
+q.to_csv('MHP_enrichment.csv')
+
+
+#%% join with expression data
+scermap = pd.read_csv('Scer_gene_names.tsv',sep='\t')
+scermap.Gene = scermap.Gene.str.rstrip('p')
+scermap.Gene = scermap.Gene.str.upper()
+paxdb = pd.read_csv('Scer_paxdb.csv',sep='\t')
+scermap = scermap.merge(paxdb,left_on='ORF',right_on='ORF')
+
+q = results_df.merge(scermap,left_index=True,right_on='ORF')
+
 # %% histograms for paper
 xl = np.linspace(-0.5,0.5,1000)
 bw = 0.1
