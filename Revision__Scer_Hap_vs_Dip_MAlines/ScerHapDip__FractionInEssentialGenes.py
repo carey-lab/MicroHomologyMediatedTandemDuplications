@@ -19,7 +19,7 @@ del_fitness_file_name = DATADIR + '/Baryshnikova10.tab'
 col_names = ['chr','ORFstart','ORFnd','type','gene','orf','chr2','MHPleftStart','MHPright','SRA','Nreads','MHPleftend']
 df = pd.read_csv(data_file_name,sep='\t',names=col_names,keep_default_na=False
         ,dtype={'gene':str,'orf':str})
-df['MHlen'] = df.MHPleftend - df.MHPleftStart
+df['MHlen'] = df.MHPleftend - df.MHPleftStart + 1
 df['Essential'] = df.type.str.match('Essential')
 df['Non_essen'] = np.logical_or(df.type.str.match('Non-essent'),df.type.str.len()==0)
 df['Intergenic'] = df.type.str.match('intergenic')
@@ -38,9 +38,11 @@ df.reset_index(inplace=True,drop=True)
 # have to do this twice because some MTDs get assigned to multiple features
 NsrasEachMTD = df.groupby(['MHPleftStart','MHPleftend','MHPright','SRA'])['chr'].agg('count').sort_values(ascending=False)
 NsrasEachMTD = NsrasEachMTD.groupby(['MHPleftStart','MHPleftend','MHPright']).agg('count').sort_values(ascending=False)
+NsrasEachMTD = pd.DataFrame(NsrasEachMTD.rename('N_SRAs_with_this_MTD')).reset_index()
 
 NsrasEachMTD_nr5 = df[df.Nreads>=5].groupby(['MHPleftStart','MHPleftend','MHPright','SRA'])['chr'].agg('count').sort_values(ascending=False)
 NsrasEachMTD_nr5 = NsrasEachMTD_nr5.groupby(['MHPleftStart','MHPleftend','MHPright']).agg('count').sort_values(ascending=False)
+NsrasEachMTD_nr5 = pd.DataFrame(NsrasEachMTD_nr5.rename('N_SRAs_with_this_MTD')).reset_index()
 
 A = pd.read_csv(anno_file_name)
 A = A[['SRA','Ploidy']]
@@ -50,30 +52,21 @@ fitness_df = pd.read_csv(del_fitness_file_name,sep='\t')[['orf','fitness']]
 #df = df.merge(fitness_df,on='orf',how='left')
 
 df.head()
-# %% count in how many SRAs we observe each MTD
-#  and only keep MTDs observed in only a single SRA
-#
-# command line equivalents: 
-#  total number:
-#      xz -dkc Scer_HapVSDip__dup_sites_found____genes_with_essentiality.txt.xz | wc -l 
-#         4853
-#
-#  number of unique MTDs:
-#      xz -dkc Scer_HapVSDip__dup_sites_found____genes_with_essentiality.txt.xz | cut -f 1-9 |sort|uniq -c|sort -nk 1|wc -l
-#           993
-#
+
+#%% keep only MTDs found in a single SRA
+df = df.merge(NsrasEachMTD[NsrasEachMTD.N_SRAs_with_this_MTD==1],how='inner')
+
+# %% split into haploid and diploid dataframes
 cols_to_use = ['ORFstart','ORFnd','type','orf','gene','Essential','Non_essen','Intergenic']
 cols_to_use += ['chr','MHPleftStart','MHPright','MHPleftend','MHlen','SizeDivByThree','DuplicationLength'
         ]
 
 hap = df[df.Ploidy == 'hap']
 hap = hap.groupby(cols_to_use).agg('count')
-hap = hap[hap.Nreads<2]
 hap.reset_index(drop=False,inplace=True)
 
 dip = df[df.Ploidy == 'dip']
 dip = dip.groupby(cols_to_use).agg('count')
-dip = dip[dip.Nreads<2]
 dip.reset_index(drop=False,inplace=True)
 
 hap = hap.merge(fitness_df,on='orf',how='left')
@@ -154,6 +147,8 @@ for I in range(4):
                         pass
 
 plt.savefig(image_file_basename + 'bar_plots_bootstrap_errorbars.png',dpi=600)
+plt.savefig(image_file_basename + 'bar_plots_bootstrap_errorbars.svg')
+plt.savefig(image_file_basename + 'bar_plots_bootstrap_errorbars.pdf')
 
 #%% chose an example de-novo MT0D
 q = df.groupby(cols_to_use)['Nreads'].agg(['sum','count']).sort_values('sum',ascending=False)
