@@ -1,3 +1,13 @@
+## Contains all the scripts for making figures and downstream data-analysis for the paper: 
+A rapidly reversible mutation generates subclonal genetic diversity and unstable drug resistance
+
+Lufeng Dan, Yuze Li, Shuhua Chen, Jingbo Liu, Fangting Li, Yu Wang, Xiangwei He*, Lucas B. Carey*
+
+Most genetic changes have negligible reversion rates. As most mutations that confer resistance to an adversary condition (e.g., drug treatment) also confer a growth defect in its absence, it is challenging for cells to genetically adapt to transient environmental changes. Here we identify a set of rapidly reversible drug resistance mutations in S. pombe that are caused by Microhomology mediated Tandem Duplication (MTD), and reversion back to the wild-type sequence. Using 10,000x coverage whole-genome sequencing we identify near 6000 subclonal MTDs in a single clonal population, and determine using machine learning how MTD frequency is encoded in genome. We find that sequences with the highest predicted MTD rates tend to generate insertions that maintain the correct reading frame suggesting that MTD formation has shaped the evolution of coding sequences. Our study reveals a common mechanism of reversible genetic variation that is beneficial for adaptation to environmental fluctuations and facilitates evolutionary divergence.
+
+https://doi.org/10.1101/2020.03.03.972455
+
+
 ## Run on Cluster
 
 Scripts for one-command (actually two-command) running on cluster is presented in the folder `run_on_cluster`.
